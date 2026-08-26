@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="theme-color"
+        content="#08000f"
+    >
+
+    <title>Login — Scorpio Host</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            padding: 20px;
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            color: #fff;
+
+            background:
+                radial-gradient(
+                    circle at top left,
+                    #32105c,
+                    transparent 40%
+                ),
+                radial-gradient(
+                    circle at bottom right,
+                    #102d5c,
+                    transparent 40%
+                ),
+                #08000f;
+        }
+
+        .box {
+            width: 100%;
+            max-width: 430px;
+
+            padding: 32px;
+
+            border-radius: 24px;
+
+            background:
+                rgba(255,255,255,.07);
+
+            border:
+                1px solid
+                rgba(255,255,255,.12);
+
+            backdrop-filter:
+                blur(20px);
+
+            box-shadow:
+                0 25px 70px
+                rgba(0,0,0,.4);
+        }
+
+        .logo {
+            text-align: center;
+
+            font-size: 28px;
+
+            font-weight: 800;
+
+            margin-bottom: 8px;
+        }
+
+        .logo span {
+            color: #a855f7;
+        }
+
+        .subtitle {
+            text-align: center;
+
+            color:
+                rgba(255,255,255,.55);
+
+            font-size: 14px;
+
+            margin-bottom: 28px;
+        }
+
+        .field {
+            margin-bottom: 17px;
+        }
+
+        label {
+            display: block;
+
+            font-size: 13px;
+
+            color:
+                rgba(255,255,255,.7);
+
+            margin-bottom: 7px;
+        }
+
+        input {
+            width: 100%;
+
+            padding: 14px;
+
+            border-radius: 12px;
+
+            border:
+                1px solid
+                rgba(255,255,255,.15);
+
+            background:
+                rgba(0,0,0,.25);
+
+            color: #fff;
+
+            outline: none;
+
+            font-size: 15px;
+        }
+
+        input:focus {
+            border-color: #a855f7;
+        }
+
+        button {
+            width: 100%;
+
+            padding: 15px;
+
+            border: 0;
+
+            border-radius: 13px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #7c3aed,
+                    #2563eb
+                );
+
+            color: #fff;
+
+            font-size: 16px;
+
+            font-weight: 700;
+
+            cursor: pointer;
+        }
+
+        button:disabled {
+            opacity: .6;
+            cursor: not-allowed;
+        }
+
+        .message {
+            display: none;
+
+            margin-top: 15px;
+
+            padding: 12px;
+
+            border-radius: 10px;
+
+            font-size: 14px;
+        }
+
+        .message.show {
+            display: block;
+        }
+
+        .register {
+            text-align: center;
+
+            margin-top: 22px;
+
+            font-size: 14px;
+
+            color:
+                rgba(255,255,255,.55);
+        }
+
+        .register a {
+            color: #a855f7;
+
+            text-decoration: none;
+
+            font-weight: 700;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="box">
+
+    <div class="logo">
+        Scorpio <span>Host</span>
+    </div>
+
+    <div class="subtitle">
+        Login to your hosting account
+    </div>
+
+
+    <form id="loginForm">
+
+        <div class="field">
+
+            <label for="email">
+                Email
+            </label>
+
+            <input
+                id="email"
+                type="email"
+                placeholder="you@example.com"
+                autocomplete="email"
+                required
+            >
+
+        </div>
+
+
+        <div class="field">
+
+            <label for="password">
+                Password
+            </label>
+
+            <input
+                id="password"
+                type="password"
+                placeholder="Your password"
+                autocomplete="current-password"
+                required
+            >
+
+        </div>
+
+
+        <button
+            id="loginButton"
+            type="submit"
+        >
+            Login
+        </button>
+
+
+        <div
+            id="message"
+            class="message"
+        ></div>
+
+    </form>
+
+
+    <div class="register">
+
+        Don't have an account?
+
+        <a href="/register.html">
+            Create one
+        </a>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* =====================================================
+   API
+===================================================== */
+
+const API =
+    window.location.origin;
+
+
+/* =====================================================
+   ELEMENTS
+===================================================== */
+
+const form =
+    document.getElementById(
+        "loginForm"
+    );
+
+const button =
+    document.getElementById(
+        "loginButton"
+    );
+
+const message =
+    document.getElementById(
+        "message"
+    );
+
+
+/* =====================================================
+   MESSAGE
+===================================================== */
+
+function showMessage(
+    text,
+    success = false
+) {
+
+    message.textContent =
+        text;
+
+    message.classList.add(
+        "show"
+    );
+
+    if (success) {
+
+        message.style.background =
+            "rgba(34,197,94,.15)";
+
+    } else {
+
+        message.style.background =
+            "rgba(239,68,68,.15)";
+
+    }
+
+}
+
+
+/* =====================================================
+   LOGIN
+===================================================== */
+
+form.addEventListener(
+    "submit",
+    async (event) => {
+
+        event.preventDefault();
+
+
+        const email =
+            document
+                .getElementById("email")
+                .value
+                .trim();
+
+        const password =
+            document
+                .getElementById("password")
+                .value;
+
+
+        button.disabled =
+            true;
+
+        button.textContent =
+            "Logging in...";
+
+
+        message.classList.remove(
+            "show"
+        );
+
+
+        try {
+
+            const response =
+                await fetch(
+                    `${API}/api/auth/login`,
+                    {
+
+                        method:
+                            "POST",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        body:
+                            JSON.stringify({
+
+                                email:
+                                    email,
+
+                                password:
+                                    password
+
+                            })
+
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    data.message ||
+                    "Login failed."
+                );
+
+            }
+
+
+            if (
+                !data.token
+            ) {
+
+                throw new Error(
+                    "Server did not return an authentication token."
+                );
+
+            }
+
+
+            /* -----------------------------------------
+               SAVE AUTHENTICATION
+            ----------------------------------------- */
+
+            localStorage.setItem(
+                "token",
+                data.token
+            );
+
+
+            if (data.user) {
+
+                localStorage.setItem(
+                    "user",
+                    JSON.stringify(
+                        data.user
+                    )
+                );
+
+            }
+
+
+            if (data.wallet) {
+
+                localStorage.setItem(
+                    "wallet",
+                    JSON.stringify(
+                        data.wallet
+                    )
+                );
+
+            }
+
+
+            showMessage(
+                "Login successful. Redirecting...",
+                true
+            );
+
+
+            /* -----------------------------------------
+               DASHBOARD
+            ----------------------------------------- */
+
+            setTimeout(
+                () => {
+
+                    window.location.href =
+                        "/dashboard.html";
+
+                },
+                500
+            );
+
+
+        } catch (error) {
+
+            console.error(
+                "Login error:",
+                error
+            );
+
+            showMessage(
+                error.message ||
+                "Unable to login."
+            );
+
+
+        } finally {
+
+            button.disabled =
+                false;
+
+            button.textContent =
+                "Login";
+
+        }
+
+    }
+);
+
+</script>
+
+</body>
+
+</html>
