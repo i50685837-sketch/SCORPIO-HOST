@@ -1,0 +1,1489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#08000f">
+
+<title>My Bots — Scorpio Host</title>
+
+<style>
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Arial,Helvetica,sans-serif;
+    background:
+        radial-gradient(
+            circle at 70% 10%,
+            rgba(125,0,255,.18),
+            transparent 30%
+        ),
+        linear-gradient(
+            135deg,
+            #050008,
+            #100018,
+            #050008
+        );
+    color:#fff;
+    min-height:100vh;
+}
+
+/* ==============================
+   SIDEBAR
+============================== */
+
+.sidebar{
+    position:fixed;
+    left:0;
+    top:0;
+    bottom:0;
+    width:245px;
+    padding:24px 16px;
+    background:rgba(13,3,21,.94);
+    border-right:1px solid rgba(180,80,255,.16);
+    backdrop-filter:blur(20px);
+    z-index:100;
+    transition:.3s;
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-bottom:35px;
+}
+
+.brand-icon{
+    width:43px;
+    height:43px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border:1px solid #a900ff;
+    border-radius:50%;
+    color:#d38aff;
+    font-size:22px;
+    box-shadow:0 0 18px rgba(145,0,255,.55);
+}
+
+.brand h2{
+    font-size:17px;
+    letter-spacing:2px;
+}
+
+.brand small{
+    display:block;
+    margin-top:3px;
+    color:#8e7c97;
+    font-size:9px;
+}
+
+.nav-title{
+    color:#675b70;
+    font-size:9px;
+    letter-spacing:2px;
+    margin:20px 10px 8px;
+}
+
+.nav a{
+    display:flex;
+    align-items:center;
+    gap:13px;
+    height:45px;
+    padding:0 12px;
+    margin:4px 0;
+    border-radius:11px;
+    color:#a99bad;
+    text-decoration:none;
+    font-size:13px;
+    transition:.2s;
+}
+
+.nav a:hover,
+.nav a.active{
+    color:#fff;
+    background:linear-gradient(
+        90deg,
+        rgba(130,0,255,.25),
+        rgba(130,0,255,.06)
+    );
+    box-shadow:inset 3px 0 #a500ff;
+}
+
+.nav-icon{
+    width:21px;
+    text-align:center;
+    font-size:17px;
+}
+
+/* ==============================
+   MAIN
+============================== */
+
+.main{
+    margin-left:245px;
+    min-height:100vh;
+    padding:25px;
+}
+
+.topbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:25px;
+}
+
+.menu-btn{
+    display:none;
+    border:0;
+    background:rgba(255,255,255,.05);
+    color:#fff;
+    font-size:22px;
+    padding:9px 12px;
+    border-radius:10px;
+    cursor:pointer;
+}
+
+.page-title h1{
+    font-size:26px;
+}
+
+.page-title p{
+    color:#8f8195;
+    font-size:12px;
+    margin-top:5px;
+}
+
+.profile{
+    display:flex;
+    align-items:center;
+    gap:11px;
+}
+
+.avatar{
+    width:40px;
+    height:40px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:50%;
+    background:linear-gradient(
+        135deg,
+        #7100ff,
+        #b000ff
+    );
+    font-weight:bold;
+    box-shadow:0 0 18px rgba(140,0,255,.35);
+}
+
+/* ==============================
+   SUMMARY
+============================== */
+
+.summary{
+    display:grid;
+    grid-template-columns:
+        repeat(3,1fr);
+    gap:15px;
+    margin-bottom:20px;
+}
+
+.summary-card{
+    padding:20px;
+    border-radius:17px;
+    border:1px solid rgba(190,90,255,.16);
+    background:rgba(255,255,255,.035);
+    backdrop-filter:blur(14px);
+}
+
+.summary-label{
+    color:#8d8094;
+    font-size:11px;
+}
+
+.summary-value{
+    margin-top:9px;
+    font-size:25px;
+    font-weight:bold;
+}
+
+.purple{
+    color:#d18aff;
+    text-shadow:
+        0 0 15px rgba(160,0,255,.6);
+}
+
+.green{
+    color:#74f5ad;
+}
+
+.orange{
+    color:#ffca75;
+}
+
+/* ==============================
+   TOOLBAR
+============================== */
+
+.toolbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:15px;
+    margin-bottom:20px;
+}
+
+.search{
+    flex:1;
+}
+
+.search input{
+    width:100%;
+    height:45px;
+    border-radius:11px;
+    border:1px solid rgba(190,90,255,.15);
+    background:rgba(0,0,0,.22);
+    color:#fff;
+    padding:0 15px;
+    outline:none;
+}
+
+.search input:focus{
+    border-color:#a400ff;
+    box-shadow:
+        0 0 0 3px rgba(145,0,255,.08);
+}
+
+.deploy-btn{
+    height:45px;
+    padding:0 20px;
+    border-radius:11px;
+    background:
+        linear-gradient(
+            135deg,
+            #7200ff,
+            #b000ff
+        );
+    color:#fff;
+    text-decoration:none;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:12px;
+    font-weight:bold;
+    box-shadow:
+        0 0 20px rgba(140,0,255,.3);
+}
+
+/* ==============================
+   BOTS GRID
+============================== */
+
+.bots-grid{
+    display:grid;
+    grid-template-columns:
+        repeat(2,1fr);
+    gap:16px;
+}
+
+.bot-card{
+    padding:20px;
+    border-radius:17px;
+    border:1px solid rgba(190,90,255,.15);
+    background:rgba(255,255,255,.035);
+    backdrop-filter:blur(14px);
+    transition:.25s;
+}
+
+.bot-card:hover{
+    transform:translateY(-3px);
+    border-color:rgba(180,80,255,.35);
+    box-shadow:
+        0 15px 35px rgba(0,0,0,.25),
+        0 0 20px rgba(130,0,255,.08);
+}
+
+.bot-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+}
+
+.bot-info{
+    display:flex;
+    align-items:center;
+    gap:13px;
+}
+
+.bot-icon{
+    width:48px;
+    height:48px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:13px;
+    background:rgba(135,0,255,.15);
+    border:1px solid rgba(180,80,255,.13);
+    font-size:23px;
+}
+
+.bot-name{
+    font-size:14px;
+    font-weight:bold;
+}
+
+.bot-type{
+    margin-top:5px;
+    color:#766a7b;
+    font-size:10px;
+}
+
+.status{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    font-size:10px;
+}
+
+.status.online{
+    color:#69eaa0;
+}
+
+.status.offline{
+    color:#ff879d;
+}
+
+.status.stopped{
+    color:#ffca75;
+}
+
+.dot{
+    width:7px;
+    height:7px;
+    border-radius:50%;
+}
+
+.online .dot{
+    background:#4cff98;
+    box-shadow:0 0 9px #4cff98;
+}
+
+.offline .dot{
+    background:#ff5470;
+}
+
+.stopped .dot{
+    background:#ffb84d;
+}
+
+/* ==============================
+   BOT DETAILS
+============================== */
+
+.bot-details{
+    margin-top:20px;
+    display:grid;
+    grid-template-columns:
+        repeat(3,1fr);
+    gap:10px;
+}
+
+.detail{
+    padding:11px;
+    border-radius:10px;
+    background:rgba(0,0,0,.17);
+}
+
+.detail-label{
+    color:#6f6475;
+    font-size:9px;
+}
+
+.detail-value{
+    margin-top:5px;
+    font-size:11px;
+}
+
+/* ==============================
+   BOT ACTIONS
+============================== */
+
+.bot-actions{
+    display:flex;
+    gap:8px;
+    margin-top:17px;
+}
+
+.bot-actions button,
+.bot-actions a{
+    flex:1;
+    height:36px;
+    border-radius:9px;
+    border:1px solid rgba(190,90,255,.14);
+    background:rgba(255,255,255,.035);
+    color:#c9b8d0;
+    text-decoration:none;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    font-size:10px;
+}
+
+.bot-actions button:hover,
+.bot-actions a:hover{
+    border-color:#a400ff;
+    color:#fff;
+}
+
+.bot-actions .primary{
+    background:
+        linear-gradient(
+            135deg,
+            rgba(114,0,255,.7),
+            rgba(176,0,255,.7)
+        );
+    color:#fff;
+    border:0;
+}
+
+/* ==============================
+   EMPTY STATE
+============================== */
+
+.empty{
+    display:none;
+    padding:60px 20px;
+    text-align:center;
+    border:1px dashed rgba(190,90,255,.18);
+    border-radius:18px;
+    background:rgba(255,255,255,.025);
+}
+
+.empty-icon{
+    font-size:42px;
+    margin-bottom:14px;
+}
+
+.empty h2{
+    font-size:17px;
+}
+
+.empty p{
+    margin-top:7px;
+    color:#776b7d;
+    font-size:11px;
+}
+
+.empty a{
+    display:inline-flex;
+    margin-top:20px;
+    padding:12px 20px;
+    border-radius:10px;
+    background:
+        linear-gradient(
+            135deg,
+            #7200ff,
+            #b000ff
+        );
+    color:#fff;
+    text-decoration:none;
+    font-size:11px;
+    font-weight:bold;
+}
+
+/* ==============================
+   LOADING
+============================== */
+
+.loading{
+    text-align:center;
+    padding:50px;
+    color:#817487;
+    font-size:12px;
+}
+
+/* ==============================
+   RESPONSIVE
+============================== */
+
+@media(max-width:900px){
+
+    .bots-grid{
+        grid-template-columns:1fr;
+    }
+
+}
+
+@media(max-width:750px){
+
+    .sidebar{
+        transform:translateX(-100%);
+    }
+
+    .sidebar.open{
+        transform:translateX(0);
+    }
+
+    .main{
+        margin-left:0;
+        padding:18px;
+    }
+
+    .menu-btn{
+        display:block;
+    }
+
+    .topbar{
+        gap:12px;
+    }
+
+    .page-title{
+        flex:1;
+    }
+
+    .page-title h1{
+        font-size:21px;
+    }
+
+    .profile{
+        display:none;
+    }
+
+}
+
+@media(max-width:600px){
+
+    .summary{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .toolbar{
+        flex-direction:column;
+        align-items:stretch;
+    }
+
+    .deploy-btn{
+        width:100%;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- =========================
+     SIDEBAR
+========================= -->
+
+<aside class="sidebar" id="sidebar">
+
+    <div class="brand">
+
+        <div class="brand-icon">
+            ♏
+        </div>
+
+        <div>
+
+            <h2>SCORPIO</h2>
+
+            <small>
+                HOSTING PLATFORM
+            </small>
+
+        </div>
+
+    </div>
+
+    <div class="nav-title">
+        MAIN
+    </div>
+
+    <nav class="nav">
+
+        <a href="dashboard.html">
+            <span class="nav-icon">⌂</span>
+            Dashboard
+        </a>
+
+        <a href="my-bots.html" class="active">
+            <span class="nav-icon">🤖</span>
+            My Bots
+        </a>
+
+        <a href="deploy.html">
+            <span class="nav-icon">🚀</span>
+            Deploy Bot
+        </a>
+
+        <a href="console.html">
+            <span class="nav-icon">⌘</span>
+            Console
+        </a>
+
+        <a href="monitoring.html">
+            <span class="nav-icon">📊</span>
+            Monitoring
+        </a>
+
+        <div class="nav-title">
+            ACCOUNT
+        </div>
+
+        <a href="wallet.html">
+            <span class="nav-icon">💳</span>
+            Wallet
+        </a>
+
+        <a href="billing.html">
+            <span class="nav-icon">💰</span>
+            Billing
+        </a>
+
+        <a href="api-keys.html">
+            <span class="nav-icon">🔑</span>
+            API Keys
+        </a>
+
+        <a href="settings.html">
+            <span class="nav-icon">⚙️</span>
+            Settings
+        </a>
+
+        <a href="login.html" onclick="logout()">
+            <span class="nav-icon">↪</span>
+            Logout
+        </a>
+
+    </nav>
+
+</aside>
+
+
+<!-- =========================
+     MAIN
+========================= -->
+
+<main class="main">
+
+    <div class="topbar">
+
+        <button
+            class="menu-btn"
+            onclick="toggleSidebar()"
+        >
+            ☰
+        </button>
+
+        <div class="page-title">
+
+            <h1>
+                My Bots
+            </h1>
+
+            <p>
+                Manage and monitor your deployed bots.
+            </p>
+
+        </div>
+
+        <div class="profile">
+
+            <strong id="userName">
+                User
+            </strong>
+
+            <div
+                class="avatar"
+                id="avatar"
+            >
+                U
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         SUMMARY
+    ========================= -->
+
+    <section class="summary">
+
+        <div class="summary-card">
+
+            <div class="summary-label">
+                TOTAL BOTS
+            </div>
+
+            <div
+                class="summary-value purple"
+                id="totalBots"
+            >
+                0
+            </div>
+
+        </div>
+
+
+        <div class="summary-card">
+
+            <div class="summary-label">
+                ONLINE
+            </div>
+
+            <div
+                class="summary-value green"
+                id="onlineBots"
+            >
+                0
+            </div>
+
+        </div>
+
+
+        <div class="summary-card">
+
+            <div class="summary-label">
+                STOPPED / OFFLINE
+            </div>
+
+            <div
+                class="summary-value orange"
+                id="offlineBots"
+            >
+                0
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         TOOLBAR
+    ========================= -->
+
+    <div class="toolbar">
+
+        <div class="search">
+
+            <input
+                type="search"
+                id="search"
+                placeholder="Search your bots..."
+                oninput="filterBots()"
+            >
+
+        </div>
+
+        <a
+            href="deploy.html"
+            class="deploy-btn"
+        >
+            🚀 Deploy New Bot
+        </a>
+
+    </div>
+
+
+    <!-- =========================
+         BOTS
+    ========================= -->
+
+    <div
+        id="loading"
+        class="loading"
+    >
+        Loading your bots...
+    </div>
+
+    <section
+        class="bots-grid"
+        id="botsGrid"
+    ></section>
+
+
+    <!-- EMPTY -->
+    <div
+        class="empty"
+        id="emptyState"
+    >
+
+        <div class="empty-icon">
+            🤖
+        </div>
+
+        <h2>
+            No bots deployed
+        </h2>
+
+        <p>
+            Deploy your first WhatsApp,
+            Telegram or Discord bot.
+        </p>
+
+        <a href="deploy.html">
+            Deploy Your First Bot
+        </a>
+
+    </div>
+
+</main>
+
+
+<script>
+
+/* ==============================
+   CONFIG
+============================== */
+
+const API_BASE = "/api";
+
+
+/* ==============================
+   AUTH
+============================== */
+
+function getToken(){
+
+    return localStorage.getItem(
+        "scorpio_token"
+    );
+
+}
+
+
+/* ==============================
+   AUTH HEADERS
+============================== */
+
+function authHeaders(){
+
+    const token = getToken();
+
+    return {
+        "Content-Type":
+            "application/json",
+
+        ...(token
+            ? {
+                "Authorization":
+                    "Bearer " + token
+              }
+            : {})
+    };
+
+}
+
+
+/* ==============================
+   SIDEBAR
+============================== */
+
+function toggleSidebar(){
+
+    document
+        .getElementById("sidebar")
+        .classList.toggle("open");
+
+}
+
+
+/* ==============================
+   LOGOUT
+============================== */
+
+function logout(){
+
+    localStorage.removeItem(
+        "scorpio_token"
+    );
+
+    localStorage.removeItem(
+        "scorpio_user"
+    );
+
+}
+
+
+/* ==============================
+   LOAD USER
+============================== */
+
+function loadUser(){
+
+    try{
+
+        const user =
+            JSON.parse(
+                localStorage.getItem(
+                    "scorpio_user"
+                )
+            );
+
+        if(!user) return;
+
+        const name =
+            user.name ||
+            user.username ||
+            user.email ||
+            "User";
+
+        document
+            .getElementById("userName")
+            .textContent = name;
+
+        document
+            .getElementById("avatar")
+            .textContent =
+                name
+                    .charAt(0)
+                    .toUpperCase();
+
+    }catch(error){
+
+        console.log(
+            "User information unavailable."
+        );
+
+    }
+
+}
+
+
+/* ==============================
+   BOT STORAGE
+============================== */
+
+let allBots = [];
+
+
+/* ==============================
+   LOAD BOTS
+============================== */
+
+async function loadBots(){
+
+    const loading =
+        document.getElementById(
+            "loading"
+        );
+
+    try{
+
+        const token = getToken();
+
+        if(!token){
+
+            window.location.href =
+                "login.html";
+
+            return;
+
+        }
+
+        const response =
+            await fetch(
+                `${API_BASE}/bots`,
+                {
+                    method:"GET",
+                    headers:
+                        authHeaders()
+                }
+            );
+
+        if(
+            response.status === 401 ||
+            response.status === 403
+        ){
+
+            localStorage.removeItem(
+                "scorpio_token"
+            );
+
+            window.location.href =
+                "login.html";
+
+            return;
+
+        }
+
+        const data =
+            await response.json();
+
+        if(!response.ok){
+
+            throw new Error(
+                data.message ||
+                "Unable to load bots."
+            );
+
+        }
+
+        /*
+          Supports either:
+
+          {
+            bots: [...]
+          }
+
+          OR
+
+          {
+            data: [...]
+          }
+        */
+
+        allBots =
+            data.bots ||
+            data.data ||
+            [];
+
+        renderBots(
+            allBots
+        );
+
+    }catch(error){
+
+        console.error(
+            "Bot loading error:",
+            error
+        );
+
+        loading.textContent =
+            "Unable to load bots.";
+
+    }finally{
+
+        loading.style.display =
+            "none";
+
+    }
+
+}
+
+
+/* ==============================
+   RENDER BOTS
+============================== */
+
+function renderBots(bots){
+
+    const grid =
+        document.getElementById(
+            "botsGrid"
+        );
+
+    const empty =
+        document.getElementById(
+            "emptyState"
+        );
+
+    grid.innerHTML = "";
+
+    updateStats(bots);
+
+
+    if(!bots.length){
+
+        empty.style.display =
+            "block";
+
+        return;
+
+    }
+
+    empty.style.display =
+        "none";
+
+
+    bots.forEach(bot => {
+
+        const card =
+            document.createElement(
+                "div"
+            );
+
+        card.className =
+            "bot-card";
+
+        const status =
+            String(
+                bot.status ||
+                "offline"
+            ).toLowerCase();
+
+
+        let statusClass =
+            "offline";
+
+        let statusText =
+            "Offline";
+
+
+        if(
+            status === "online" ||
+            status === "running" ||
+            status === "active"
+        ){
+
+            statusClass =
+                "online";
+
+            statusText =
+                "Online";
+
+        }
+        else if(
+            status === "stopped"
+        ){
+
+            statusClass =
+                "stopped";
+
+            statusText =
+                "Stopped";
+
+        }
+
+
+        const botName =
+            escapeHTML(
+                bot.name ||
+                bot.botName ||
+                "Unnamed Bot"
+            );
+
+        const botType =
+            escapeHTML(
+                bot.type ||
+                bot.platform ||
+                "Bot"
+            );
+
+        const id =
+            escapeHTML(
+                bot._id ||
+                bot.id ||
+                ""
+            );
+
+
+        card.innerHTML = `
+
+            <div class="bot-header">
+
+                <div class="bot-info">
+
+                    <div class="bot-icon">
+                        🤖
+                    </div>
+
+                    <div>
+
+                        <div class="bot-name">
+                            ${botName}
+                        </div>
+
+                        <div class="bot-type">
+                            ${botType}
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    class="status ${statusClass}"
+                >
+
+                    <span class="dot"></span>
+
+                    ${statusText}
+
+                </div>
+
+            </div>
+
+
+            <div class="bot-details">
+
+                <div class="detail">
+
+                    <div class="detail-label">
+                        CPU
+                    </div>
+
+                    <div class="detail-value">
+                        ${bot.cpu || "0%"}
+                    </div>
+
+                </div>
+
+
+                <div class="detail">
+
+                    <div class="detail-label">
+                        MEMORY
+                    </div>
+
+                    <div class="detail-value">
+                        ${bot.memory || "0 MB"}
+                    </div>
+
+                </div>
+
+
+                <div class="detail">
+
+                    <div class="detail-label">
+                        UPTIME
+                    </div>
+
+                    <div class="detail-value">
+                        ${bot.uptime || "0h"}
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="bot-actions">
+
+                <a
+                    href="console.html?bot=${encodeURIComponent(id)}"
+                >
+                    Console
+                </a>
+
+                <button
+                    onclick="restartBot('${id}')"
+                    class="primary"
+                >
+                    Restart
+                </button>
+
+                <a
+                    href="monitoring.html?bot=${encodeURIComponent(id)}"
+                >
+                    Monitor
+                </a>
+
+            </div>
+
+        `;
+
+        grid.appendChild(card);
+
+    });
+
+}
+
+
+/* ==============================
+   STATS
+============================== */
+
+function updateStats(bots){
+
+    const total =
+        bots.length;
+
+    const online =
+        bots.filter(bot => {
+
+            const status =
+                String(
+                    bot.status ||
+                    ""
+                ).toLowerCase();
+
+            return (
+                status === "online" ||
+                status === "running" ||
+                status === "active"
+            );
+
+        }).length;
+
+    document
+        .getElementById(
+            "totalBots"
+        )
+        .textContent = total;
+
+    document
+        .getElementById(
+            "onlineBots"
+        )
+        .textContent = online;
+
+    document
+        .getElementById(
+            "offlineBots"
+        )
+        .textContent =
+            total - online;
+
+}
+
+
+/* ==============================
+   SEARCH
+============================== */
+
+function filterBots(){
+
+    const query =
+        document
+            .getElementById(
+                "search"
+            )
+            .value
+            .toLowerCase()
+            .trim();
+
+    const filtered =
+        allBots.filter(bot => {
+
+            const name =
+                String(
+                    bot.name ||
+                    bot.botName ||
+                    ""
+                ).toLowerCase();
+
+            const type =
+                String(
+                    bot.type ||
+                    bot.platform ||
+                    ""
+                ).toLowerCase();
+
+            return (
+                name.includes(query) ||
+                type.includes(query)
+            );
+
+        });
+
+    renderBots(filtered);
+
+}
+
+
+/* ==============================
+   RESTART BOT
+============================== */
+
+async function restartBot(botId){
+
+    if(!botId){
+
+        alert(
+            "Bot ID is missing."
+        );
+
+        return;
+
+    }
+
+    try{
+
+        const response =
+            await fetch(
+                `${API_BASE}/bots/${encodeURIComponent(botId)}/restart`,
+                {
+                    method:"POST",
+                    headers:
+                        authHeaders()
+                }
+            );
+
+        const data =
+            await response.json();
+
+        if(!response.ok){
+
+            throw new Error(
+                data.message ||
+                "Unable to restart bot."
+            );
+
+        }
+
+        alert(
+            "Bot restart requested successfully."
+        );
+
+        await loadBots();
+
+    }catch(error){
+
+        console.error(error);
+
+        alert(
+            error.message ||
+            "Unable to restart bot."
+        );
+
+    }
+
+}
+
+
+/* ==============================
+   HTML ESCAPE
+============================== */
+
+function escapeHTML(value){
+
+    return String(value)
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+/* ==============================
+   INITIALIZE
+============================== */
+
+loadUser();
+
+loadBots();
+
+</script>
+
+</body>
+</html>
