@@ -1171,4 +1171,149 @@ const server =
             );
 
             console.log(
+                `📁 Public: ${publicPath}`
+            );
+
+            console.log(
+                `📄 Pages: ${pagesPath}`
+            );
+
+            console.log(
+                "=========================================="
+            );
+
+            console.log(
+                "📌 Frontend:"
+            );
+
+            console.log(
+                `   ${APP_URL}/`
+            );
+
+            console.log(
+                `   ${APP_URL}/pages/login.html`
+            );
+
+            console.log(
+                `   ${APP_URL}/pages/register.html`
+            );
+
+            console.log(
+                `   ${APP_URL}/pages/dashboard.html`
+            );
+
+            console.log(
+                "=========================================="
+            );
+
+            console.log(
+                "🔌 API:"
+            );
+
+            console.log(
+                `   ${APP_URL}/api`
+            );
+
+            console.log(
+                `   ${APP_URL}/api/health`
+            );
+
+            console.log(
+                `   ${APP_URL}/api/auth`
+            );
+
+            console.log(
+                `   ${APP_URL}/api/wallet`
+            );
+
+            console.log(
+                `   ${APP_URL}/api/payment/stk`
+            );
+
+            console.log(
+                `   ${APP_URL}/api/payment/intasend/webhook`
+            );
+
+            console.log(
+                "=========================================="
+            );
+
+            console.log("");
+
+        }
+    );
+
+/* =========================================================
+   GRACEFUL SHUTDOWN
+   ========================================================= */
+
+async function shutdown(
+    signal
+) {
+
+    console.log(
+        `⚠️ ${signal} received`
+    );
+
+    console.log(
+        "🛑 Shutting down Scorpio Host..."
+    );
+
+    server.close(
+        async () => {
+
+            try {
+
+                await mongoose
+                    .connection
+                    .close();
+
+                console.log(
+                    "✅ MongoDB connection closed"
+                );
+
+                console.log(
+                    "✅ Server stopped"
+                );
+
+                process.exit(0);
+
+            } catch (error) {
+
+                console.error(
+                    "❌ Shutdown error"
+                );
+
+                console.error(
+                    error
+                );
+
+                process.exit(1);
+
+            }
+
+        }
+    );
+
+}
+
+/* =========================================================
+   PROCESS SIGNALS
+   ========================================================= */
+
+process.on(
+    "SIGTERM",
+    () => shutdown("SIGTERM")
+);
+
+process.on(
+    "SIGINT",
+    () => shutdown("SIGINT")
+);
+
+/* =========================================================
+   EXPORT APP
+   ========================================================= */
+
+module.exports = app;
      
