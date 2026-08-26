@@ -1,0 +1,1967 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#08000f">
+
+<title>API Keys — Scorpio Host</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Arial,Helvetica,sans-serif;
+    background:
+        radial-gradient(
+            circle at 70% 10%,
+            rgba(125,0,255,.18),
+            transparent 30%
+        ),
+        linear-gradient(
+            135deg,
+            #050008,
+            #100018,
+            #050008
+        );
+    color:#fff;
+    min-height:100vh;
+}
+
+/* =====================================================
+   SIDEBAR
+===================================================== */
+
+.sidebar{
+    position:fixed;
+    left:0;
+    top:0;
+    bottom:0;
+    width:245px;
+    padding:24px 16px;
+    background:rgba(13,3,21,.92);
+    border-right:1px solid rgba(180,80,255,.16);
+    backdrop-filter:blur(20px);
+    z-index:100;
+    transition:.3s;
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-bottom:35px;
+}
+
+.brand-icon{
+    width:43px;
+    height:43px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border:1px solid #a900ff;
+    border-radius:50%;
+    color:#d38aff;
+    font-size:22px;
+    box-shadow:0 0 18px rgba(145,0,255,.55);
+}
+
+.brand h2{
+    font-size:17px;
+    letter-spacing:2px;
+}
+
+.brand small{
+    display:block;
+    margin-top:3px;
+    color:#8e7c97;
+    font-size:9px;
+}
+
+.nav-title{
+    color:#675b70;
+    font-size:9px;
+    letter-spacing:2px;
+    margin:20px 10px 8px;
+}
+
+.nav a{
+    display:flex;
+    align-items:center;
+    gap:13px;
+    height:45px;
+    padding:0 12px;
+    margin:4px 0;
+    border-radius:11px;
+    color:#a99bad;
+    text-decoration:none;
+    font-size:13px;
+    transition:.2s;
+}
+
+.nav a:hover,
+.nav a.active{
+    color:#fff;
+    background:
+        linear-gradient(
+            90deg,
+            rgba(130,0,255,.25),
+            rgba(130,0,255,.06)
+        );
+    box-shadow:inset 3px 0 #a500ff;
+}
+
+.nav-icon{
+    width:21px;
+    text-align:center;
+    font-size:17px;
+}
+
+/* =====================================================
+   MAIN
+===================================================== */
+
+.main{
+    margin-left:245px;
+    min-height:100vh;
+    padding:25px;
+}
+
+.topbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:25px;
+}
+
+.menu-btn{
+    display:none;
+    border:0;
+    background:rgba(255,255,255,.05);
+    color:#fff;
+    font-size:22px;
+    padding:9px 12px;
+    border-radius:10px;
+}
+
+.welcome h1{
+    font-size:26px;
+}
+
+.welcome p{
+    color:#8f8195;
+    font-size:12px;
+    margin-top:5px;
+}
+
+.profile{
+    display:flex;
+    align-items:center;
+    gap:11px;
+}
+
+.avatar{
+    width:40px;
+    height:40px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:50%;
+    background:
+        linear-gradient(
+            135deg,
+            #7100ff,
+            #b000ff
+        );
+    font-weight:bold;
+    box-shadow:
+        0 0 18px
+        rgba(140,0,255,.35);
+}
+
+/* =====================================================
+   CARD
+===================================================== */
+
+.card{
+    border:
+        1px solid
+        rgba(190,90,255,.16);
+
+    border-radius:18px;
+
+    background:
+        rgba(255,255,255,.035);
+
+    backdrop-filter:blur(14px);
+
+    padding:22px;
+
+    margin-bottom:20px;
+}
+
+.card-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:18px;
+}
+
+.card-header h2{
+    font-size:16px;
+}
+
+.description{
+    color:#887a90;
+    font-size:12px;
+    line-height:1.7;
+}
+
+/* =====================================================
+   CREATE KEY
+===================================================== */
+
+.create-section{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:20px;
+}
+
+.create-info h3{
+    font-size:14px;
+    margin-bottom:7px;
+}
+
+.create-info p{
+    color:#776a7e;
+    font-size:11px;
+    line-height:1.6;
+}
+
+.create-btn{
+    border:0;
+    padding:13px 19px;
+    border-radius:11px;
+    background:
+        linear-gradient(
+            135deg,
+            #7200ff,
+            #b000ff
+        );
+    color:#fff;
+    font-size:12px;
+    font-weight:bold;
+    cursor:pointer;
+    box-shadow:
+        0 0 20px
+        rgba(140,0,255,.3);
+    transition:.2s;
+    white-space:nowrap;
+}
+
+.create-btn:hover{
+    transform:translateY(-2px);
+    box-shadow:
+        0 0 28px
+        rgba(140,0,255,.5);
+}
+
+/* =====================================================
+   API KEY ITEM
+===================================================== */
+
+.keys-list{
+    display:flex;
+    flex-direction:column;
+    gap:11px;
+}
+
+.key-item{
+    padding:17px;
+    border-radius:13px;
+    background:rgba(0,0,0,.18);
+    border:1px solid rgba(255,255,255,.06);
+}
+
+.key-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+}
+
+.key-name{
+    font-size:13px;
+    font-weight:bold;
+}
+
+.status{
+    font-size:9px;
+    padding:5px 8px;
+    border-radius:20px;
+}
+
+.status.active{
+    color:#6df3a6;
+    background:rgba(0,255,130,.07);
+    border:1px solid rgba(0,255,130,.12);
+}
+
+.status.revoked{
+    color:#ff7c8b;
+    background:rgba(255,0,50,.07);
+    border:1px solid rgba(255,0,50,.12);
+}
+
+.key-value{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin-top:13px;
+}
+
+.key-value input{
+    flex:1;
+    min-width:0;
+    height:40px;
+    padding:0 11px;
+    border-radius:9px;
+    border:1px solid rgba(190,90,255,.12);
+    background:rgba(0,0,0,.3);
+    color:#c9b5d1;
+    outline:none;
+    font-size:11px;
+}
+
+.key-actions{
+    display:flex;
+    gap:7px;
+}
+
+.small-btn{
+    height:40px;
+    min-width:40px;
+    padding:0 11px;
+    border-radius:9px;
+    border:1px solid rgba(190,90,255,.15);
+    background:rgba(255,255,255,.04);
+    color:#fff;
+    cursor:pointer;
+    font-size:11px;
+    transition:.2s;
+}
+
+.small-btn:hover{
+    border-color:#a500ff;
+    background:rgba(130,0,255,.12);
+}
+
+.revoke-btn{
+    color:#ff8c98;
+}
+
+.revoke-btn:hover{
+    border-color:rgba(255,70,90,.5);
+    background:rgba(255,0,40,.08);
+}
+
+.key-meta{
+    display:flex;
+    gap:15px;
+    margin-top:10px;
+    color:#685d6e;
+    font-size:9px;
+}
+
+/* =====================================================
+   EMPTY
+===================================================== */
+
+.empty{
+    text-align:center;
+    padding:35px 15px;
+    color:#74677b;
+}
+
+.empty-icon{
+    font-size:35px;
+    margin-bottom:12px;
+}
+
+.empty h3{
+    color:#b9a8bf;
+    font-size:14px;
+    margin-bottom:6px;
+}
+
+.empty p{
+    font-size:11px;
+}
+
+/* =====================================================
+   INFO
+===================================================== */
+
+.info-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:12px;
+}
+
+.info-box{
+    padding:17px;
+    border-radius:13px;
+    background:rgba(0,0,0,.16);
+    border:1px solid rgba(255,255,255,.05);
+}
+
+.info-icon{
+    font-size:22px;
+}
+
+.info-box h3{
+    margin-top:11px;
+    font-size:12px;
+}
+
+.info-box p{
+    margin-top:6px;
+    color:#756a7b;
+    font-size:10px;
+    line-height:1.6;
+}
+
+/* =====================================================
+   MODAL
+===================================================== */
+
+.modal{
+    position:fixed;
+    inset:0;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    background:rgba(0,0,0,.7);
+    backdrop-filter:blur(8px);
+    z-index:500;
+}
+
+.modal.show{
+    display:flex;
+}
+
+.modal-box{
+    width:100%;
+    max-width:420px;
+    padding:25px;
+    border-radius:19px;
+    border:1px solid rgba(190,90,255,.25);
+    background:
+        linear-gradient(
+            145deg,
+            rgba(25,5,38,.98),
+            rgba(10,2,16,.98)
+        );
+    box-shadow:
+        0 25px 80px
+        rgba(0,0,0,.65);
+}
+
+.modal-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:20px;
+}
+
+.modal-header h2{
+    font-size:17px;
+}
+
+.close{
+    border:0;
+    background:none;
+    color:#88788f;
+    font-size:23px;
+    cursor:pointer;
+}
+
+.form-group{
+    margin-bottom:15px;
+}
+
+.form-group label{
+    display:block;
+    margin-bottom:7px;
+    color:#cdbdd2;
+    font-size:11px;
+}
+
+.form-group input{
+    width:100%;
+    height:47px;
+    padding:0 13px;
+    border-radius:10px;
+    border:1px solid rgba(190,90,255,.17);
+    background:rgba(0,0,0,.3);
+    color:#fff;
+    outline:none;
+}
+
+.form-group input:focus{
+    border-color:#a400ff;
+    box-shadow:
+        0 0 0 3px
+        rgba(145,0,255,.08);
+}
+
+.modal-actions{
+    display:flex;
+    gap:10px;
+    margin-top:20px;
+}
+
+.cancel-btn{
+    flex:1;
+    height:47px;
+    border:1px solid rgba(255,255,255,.1);
+    border-radius:10px;
+    background:rgba(255,255,255,.04);
+    color:#aaa;
+    cursor:pointer;
+}
+
+.generate-btn{
+    flex:1;
+    height:47px;
+    border:0;
+    border-radius:10px;
+    background:
+        linear-gradient(
+            135deg,
+            #7200ff,
+            #b000ff
+        );
+    color:white;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+/* =====================================================
+   TOAST
+===================================================== */
+
+.toast{
+    position:fixed;
+    right:20px;
+    bottom:20px;
+    min-width:220px;
+    max-width:320px;
+    padding:14px 16px;
+    border-radius:12px;
+    background:rgba(25,5,35,.96);
+    border:1px solid rgba(190,90,255,.25);
+    box-shadow:0 15px 40px rgba(0,0,0,.4);
+    color:#fff;
+    font-size:11px;
+    transform:translateY(120px);
+    opacity:0;
+    transition:.3s;
+    z-index:900;
+}
+
+.toast.show{
+    transform:translateY(0);
+    opacity:1;
+}
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media(max-width:850px){
+
+    .info-grid{
+        grid-template-columns:1fr;
+    }
+
+}
+
+@media(max-width:750px){
+
+    .sidebar{
+        transform:translateX(-100%);
+    }
+
+    .sidebar.open{
+        transform:translateX(0);
+    }
+
+    .main{
+        margin-left:0;
+        padding:18px;
+    }
+
+    .menu-btn{
+        display:block;
+    }
+
+    .topbar{
+        gap:12px;
+    }
+
+    .welcome{
+        flex:1;
+    }
+
+    .welcome h1{
+        font-size:21px;
+    }
+
+    .profile{
+        display:none;
+    }
+
+    .create-section{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+
+    .create-btn{
+        width:100%;
+    }
+
+}
+
+@media(max-width:520px){
+
+    .card{
+        padding:17px;
+    }
+
+    .key-value{
+        flex-direction:column;
+        align-items:stretch;
+    }
+
+    .key-actions{
+        width:100%;
+    }
+
+    .small-btn{
+        flex:1;
+    }
+
+    .key-top{
+        align-items:flex-start;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- =====================================================
+     SIDEBAR
+===================================================== -->
+
+<aside class="sidebar" id="sidebar">
+
+    <div class="brand">
+
+        <div class="brand-icon">
+            ♏
+        </div>
+
+        <div>
+            <h2>SCORPIO</h2>
+            <small>HOSTING PLATFORM</small>
+        </div>
+
+    </div>
+
+    <div class="nav-title">
+        MAIN
+    </div>
+
+    <nav class="nav">
+
+        <a href="dashboard.html">
+            <span class="nav-icon">⌂</span>
+            Dashboard
+        </a>
+
+        <a href="my-bots.html">
+            <span class="nav-icon">🤖</span>
+            My Bots
+        </a>
+
+        <a href="deploy.html">
+            <span class="nav-icon">🚀</span>
+            Deploy Bot
+        </a>
+
+        <a href="console.html">
+            <span class="nav-icon">⌘</span>
+            Console
+        </a>
+
+        <a href="monitoring.html">
+            <span class="nav-icon">📊</span>
+            Monitoring
+        </a>
+
+        <div class="nav-title">
+            ACCOUNT
+        </div>
+
+        <a href="wallet.html">
+            <span class="nav-icon">💳</span>
+            Wallet
+        </a>
+
+        <a href="billing.html">
+            <span class="nav-icon">💰</span>
+            Billing
+        </a>
+
+        <a href="api-keys.html" class="active">
+            <span class="nav-icon">🔑</span>
+            API Keys
+        </a>
+
+        <a href="settings.html">
+            <span class="nav-icon">⚙️</span>
+            Settings
+        </a>
+
+        <a href="login.html" onclick="logout()">
+            <span class="nav-icon">↪</span>
+            Logout
+        </a>
+
+    </nav>
+
+</aside>
+
+
+<!-- =====================================================
+     MAIN
+===================================================== -->
+
+<main class="main">
+
+    <div class="topbar">
+
+        <button
+            class="menu-btn"
+            onclick="toggleSidebar()"
+        >
+            ☰
+        </button>
+
+        <div class="welcome">
+
+            <h1>
+                API Keys
+            </h1>
+
+            <p>
+                Manage API access for your Scorpio Host projects.
+            </p>
+
+        </div>
+
+        <div class="profile">
+
+            <div>
+                <strong id="userName">
+                    Morde
+                </strong>
+            </div>
+
+            <div
+                class="avatar"
+                id="avatar"
+            >
+                M
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         CREATE API KEY
+    ================================================== -->
+
+    <div class="card">
+
+        <div class="card-header">
+
+            <h2>
+                Developer Access
+            </h2>
+
+        </div>
+
+        <div class="create-section">
+
+            <div class="create-info">
+
+                <h3>
+                    Create an API key
+                </h3>
+
+                <p>
+                    Use API keys to connect your applications,
+                    bots and deployment tools with Scorpio Host.
+                </p>
+
+            </div>
+
+            <button
+                class="create-btn"
+                onclick="openModal()"
+            >
+                + Create API Key
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         API KEYS
+    ================================================== -->
+
+    <div class="card">
+
+        <div class="card-header">
+
+            <h2>
+                Your API Keys
+            </h2>
+
+        </div>
+
+        <div
+            class="keys-list"
+            id="keysList"
+        >
+
+            <div class="empty">
+
+                <div class="empty-icon">
+                    🔑
+                </div>
+
+                <h3>
+                    Loading API keys...
+                </h3>
+
+                <p>
+                    Please wait while Scorpio Host loads your keys.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         API INFORMATION
+    ================================================== -->
+
+    <div class="card">
+
+        <div class="card-header">
+
+            <h2>
+                API Security
+            </h2>
+
+        </div>
+
+        <div class="info-grid">
+
+            <div class="info-box">
+
+                <div class="info-icon">
+                    🔒
+                </div>
+
+                <h3>
+                    Keep Keys Private
+                </h3>
+
+                <p>
+                    Never expose your API keys in public
+                    repositories or frontend JavaScript.
+                </p>
+
+            </div>
+
+            <div class="info-box">
+
+                <div class="info-icon">
+                    🛡️
+                </div>
+
+                <h3>
+                    Revoke Anytime
+                </h3>
+
+                <p>
+                    Revoke a compromised key immediately
+                    from this dashboard.
+                </p>
+
+            </div>
+
+            <div class="info-box">
+
+                <div class="info-icon">
+                    ⚡
+                </div>
+
+                <h3>
+                    Automation
+                </h3>
+
+                <p>
+                    Use your API access to automate
+                    deployments and bot management.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<!-- =====================================================
+     CREATE KEY MODAL
+===================================================== -->
+
+<div
+    class="modal"
+    id="keyModal"
+>
+
+    <div class="modal-box">
+
+        <div class="modal-header">
+
+            <h2>
+                Create API Key
+            </h2>
+
+            <button
+                class="close"
+                onclick="closeModal()"
+            >
+                ×
+            </button>
+
+        </div>
+
+        <form id="createKeyForm">
+
+            <div class="form-group">
+
+                <label for="keyName">
+                    Key Name
+                </label>
+
+                <input
+                    id="keyName"
+                    type="text"
+                    placeholder="e.g. Production Bot"
+                    maxlength="50"
+                    required
+                >
+
+            </div>
+
+            <div class="modal-actions">
+
+                <button
+                    type="button"
+                    class="cancel-btn"
+                    onclick="closeModal()"
+                >
+                    Cancel
+                </button>
+
+                <button
+                    type="submit"
+                    class="generate-btn"
+                    id="generateBtn"
+                >
+                    Generate Key
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     TOAST
+===================================================== -->
+
+<div
+    class="toast"
+    id="toast"
+></div>
+
+
+<script>
+
+/* =====================================================
+   CONFIG
+===================================================== */
+
+const API_BASE = "/api";
+
+
+/* =====================================================
+   SIDEBAR
+===================================================== */
+
+function toggleSidebar(){
+
+    document
+        .getElementById("sidebar")
+        .classList
+        .toggle("open");
+
+}
+
+
+/* =====================================================
+   AUTH TOKEN
+===================================================== */
+
+function getToken(){
+
+    return localStorage.getItem(
+        "scorpio_token"
+    );
+
+}
+
+
+/* =====================================================
+   AUTH HEADERS
+===================================================== */
+
+function authHeaders(){
+
+    const token =
+        getToken();
+
+    return {
+
+        "Content-Type":
+            "application/json",
+
+        ...(token
+            ? {
+                "Authorization":
+                    `Bearer ${token}`
+            }
+            : {})
+
+    };
+
+}
+
+
+/* =====================================================
+   TOAST
+===================================================== */
+
+let toastTimer;
+
+function showToast(message){
+
+    const toast =
+        document.getElementById("toast");
+
+    toast.textContent =
+        message;
+
+    toast.classList.add("show");
+
+    clearTimeout(toastTimer);
+
+    toastTimer =
+        setTimeout(() => {
+
+            toast.classList.remove(
+                "show"
+            );
+
+        }, 3000);
+
+}
+
+
+/* =====================================================
+   LOAD USER
+===================================================== */
+
+function loadUser(){
+
+    try{
+
+        const user =
+            JSON.parse(
+                localStorage.getItem(
+                    "scorpio_user"
+                )
+            );
+
+        if(!user) return;
+
+        const name =
+            user.name ||
+            user.username ||
+            user.email ||
+            "User";
+
+        document.getElementById(
+            "userName"
+        ).textContent =
+            name;
+
+        document.getElementById(
+            "avatar"
+        ).textContent =
+            name
+                .charAt(0)
+                .toUpperCase();
+
+    }catch(error){
+
+        console.log(
+            "User information unavailable."
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   MODAL
+===================================================== */
+
+function openModal(){
+
+    document
+        .getElementById("keyModal")
+        .classList
+        .add("show");
+
+    setTimeout(() => {
+
+        document
+            .getElementById("keyName")
+            .focus();
+
+    }, 100);
+
+}
+
+
+function closeModal(){
+
+    document
+        .getElementById("keyModal")
+        .classList
+        .remove("show");
+
+    document
+        .getElementById("createKeyForm")
+        .reset();
+
+}
+
+
+/* =====================================================
+   CREATE API KEY
+===================================================== */
+
+document
+    .getElementById("createKeyForm")
+    .addEventListener(
+        "submit",
+        async function(event){
+
+            event.preventDefault();
+
+            const name =
+                document
+                    .getElementById(
+                        "keyName"
+                    )
+                    .value
+                    .trim();
+
+            if(!name){
+
+                showToast(
+                    "Enter a name for your API key."
+                );
+
+                return;
+
+            }
+
+            const button =
+                document
+                    .getElementById(
+                        "generateBtn"
+                    );
+
+            button.disabled = true;
+
+            button.textContent =
+                "Generating...";
+
+            try{
+
+                const response =
+                    await fetch(
+                        `${API_BASE}/api-keys`,
+                        {
+                            method:"POST",
+                            headers:
+                                authHeaders(),
+                            body:
+                                JSON.stringify({
+                                    name
+                                })
+                        }
+                    );
+
+                const data =
+                    await response.json()
+                        .catch(() => ({}));
+
+                if(response.status === 401){
+
+                    showToast(
+                        "Your session has expired. Please login again."
+                    );
+
+                    return;
+
+                }
+
+                if(!response.ok){
+
+                    throw new Error(
+                        data.message ||
+                        "Failed to create API key."
+                    );
+
+                }
+
+                closeModal();
+
+                showToast(
+                    "API key created successfully."
+                );
+
+                await loadKeys();
+
+            }catch(error){
+
+                console.error(
+                    "Create API key error:",
+                    error
+                );
+
+                showToast(
+                    error.message ||
+                    "Unable to create API key."
+                );
+
+            }finally{
+
+                button.disabled =
+                    false;
+
+                button.textContent =
+                    "Generate Key";
+
+            }
+
+        }
+    );
+
+
+/* =====================================================
+   LOAD API KEYS
+===================================================== */
+
+async function loadKeys(){
+
+    const list =
+        document.getElementById(
+            "keysList"
+        );
+
+    const token =
+        getToken();
+
+    if(!token){
+
+        list.innerHTML = `
+
+            <div class="empty">
+
+                <div class="empty-icon">
+                    🔐
+                </div>
+
+                <h3>
+                    Login required
+                </h3>
+
+                <p>
+                    Login to view your API keys.
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+    try{
+
+        const response =
+            await fetch(
+                `${API_BASE}/api-keys`,
+                {
+                    method:"GET",
+                    headers:
+                        authHeaders()
+                }
+            );
+
+        const data =
+            await response.json()
+                .catch(() => ({}));
+
+        if(response.status === 401){
+
+            list.innerHTML = `
+
+                <div class="empty">
+
+                    <div class="empty-icon">
+                        🔐
+                    </div>
+
+                    <h3>
+                        Session expired
+                    </h3>
+
+                    <p>
+                        Please login again.
+                    </p>
+
+                </div>
+
+            `;
+
+            return;
+
+        }
+
+        if(!response.ok){
+
+            throw new Error(
+                data.message ||
+                "Unable to load API keys."
+            );
+
+        }
+
+        const keys =
+            data.apiKeys ||
+            data.keys ||
+            data.data ||
+            [];
+
+        renderKeys(
+            Array.isArray(keys)
+                ? keys
+                : []
+        );
+
+    }catch(error){
+
+        console.error(
+            "Load API keys error:",
+            error
+        );
+
+        list.innerHTML = `
+
+            <div class="empty">
+
+                <div class="empty-icon">
+                    ⚠️
+                </div>
+
+                <h3>
+                    Unable to load keys
+                </h3>
+
+                <p>
+                    ${escapeHtml(
+                        error.message ||
+                        "Please try again."
+                    )}
+                </p>
+
+            </div>
+
+        `;
+
+    }
+
+}
+
+
+/* =====================================================
+   RENDER KEYS
+===================================================== */
+
+function renderKeys(keys){
+
+    const list =
+        document.getElementById(
+            "keysList"
+        );
+
+    if(!keys.length){
+
+        list.innerHTML = `
+
+            <div class="empty">
+
+                <div class="empty-icon">
+                    🔑
+                </div>
+
+                <h3>
+                    No API keys yet
+                </h3>
+
+                <p>
+                    Create your first API key to connect
+                    your applications with Scorpio Host.
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+    list.innerHTML =
+        keys.map(
+            (key) => {
+
+                const id =
+                    key._id ||
+                    key.id;
+
+                const name =
+                    key.name ||
+                    "Unnamed key";
+
+                const status =
+                    key.status ||
+                    (
+                        key.revoked
+                            ? "revoked"
+                            : "active"
+                    );
+
+                const value =
+                    key.key ||
+                    key.apiKey ||
+                    key.token ||
+                    "••••••••••••••••••••";
+
+                const created =
+                    key.createdAt
+                        ? new Date(
+                            key.createdAt
+                        ).toLocaleDateString()
+                        : "Unknown";
+
+                const masked =
+                    key.maskedKey ||
+                    maskKey(value);
+
+                return `
+
+                    <div
+                        class="key-item"
+                        data-key-id="${escapeHtml(
+                            id || ""
+                        )}"
+                    >
+
+                        <div class="key-top">
+
+                            <div class="key-name">
+                                ${escapeHtml(name)}
+                            </div>
+
+                            <span
+                                class="status ${
+                                    status === "active"
+                                        ? "active"
+                                        : "revoked"
+                                }"
+                            >
+                                ${
+                                    status === "active"
+                                        ? "ACTIVE"
+                                        : "REVOKED"
+                                }
+                            </span>
+
+                        </div>
+
+                        <div class="key-value">
+
+                            <input
+                                type="password"
+                                value="${escapeHtml(
+                                    masked
+                                )}"
+                                readonly
+                                data-real-key="${escapeHtml(
+                                    value
+                                )}"
+                            >
+
+                            <div class="key-actions">
+
+                                <button
+                                    class="small-btn"
+                                    onclick="toggleKey(this)"
+                                >
+                                    👁
+                                </button>
+
+                                <button
+                                    class="small-btn"
+                                    onclick="copyKey(this)"
+                                >
+                                    Copy
+                                </button>
+
+                                ${
+                                    status === "active"
+                                    ? `
+                                        <button
+                                            class="small-btn revoke-btn"
+                                            onclick="revokeKey('${escapeJs(
+                                                id
+                                            )}')"
+                                        >
+                                            Revoke
+                                        </button>
+                                    `
+                                    : ""
+                                }
+
+                            </div>
+
+                        </div>
+
+                        <div class="key-meta">
+
+                            <span>
+                                Created: ${escapeHtml(
+                                    created
+                                )}
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                `;
+
+            }
+        ).join("");
+
+}
+
+
+/* =====================================================
+   MASK KEY
+===================================================== */
+
+function maskKey(key){
+
+    if(!key){
+
+        return "••••••••••••••••••••";
+
+    }
+
+    if(key.length <= 10){
+
+        return "••••••••••••";
+
+    }
+
+    return (
+        key.substring(
+            0,
+            5
+        ) +
+        "••••••••••••••" +
+        key.substring(
+            key.length - 4
+        )
+    );
+
+}
+
+
+/* =====================================================
+   TOGGLE KEY
+===================================================== */
+
+function toggleKey(button){
+
+    const input =
+        button
+            .closest(".key-value")
+            .querySelector("input");
+
+    const realKey =
+        input.dataset.realKey;
+
+    if(input.type === "password"){
+
+        input.type = "text";
+
+        input.value =
+            realKey;
+
+        button.textContent =
+            "🙈";
+
+    }else{
+
+        input.type =
+            "password";
+
+        input.value =
+            maskKey(realKey);
+
+        button.textContent =
+            "👁";
+
+    }
+
+}
+
+
+/* =====================================================
+   COPY KEY
+===================================================== */
+
+async function copyKey(button){
+
+    const input =
+        button
+            .closest(".key-value")
+            .querySelector("input");
+
+    const realKey =
+        input.dataset.realKey;
+
+    if(
+        !realKey ||
+        realKey.includes("••")
+    ){
+
+        showToast(
+            "This API key cannot be copied because the key value was not returned."
+        );
+
+        return;
+
+    }
+
+    try{
+
+        await navigator.clipboard.writeText(
+            realKey
+        );
+
+        showToast(
+            "API key copied to clipboard."
+        );
+
+    }catch(error){
+
+        input.type =
+            "text";
+
+        input.value =
+            realKey;
+
+        input.select();
+
+        document.execCommand(
+            "copy"
+        );
+
+        input.type =
+            "password";
+
+        input.value =
+            maskKey(realKey);
+
+        showToast(
+            "API key copied."
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   REVOKE API KEY
+===================================================== */
+
+async function revokeKey(id){
+
+    if(!id){
+
+        showToast(
+            "Invalid API key."
+        );
+
+        return;
+
+    }
+
+    const confirmed =
+        confirm(
+            "Are you sure you want to revoke this API key? This action cannot be undone."
+        );
+
+    if(!confirmed){
+
+        return;
+
+    }
+
+    try{
+
+        const response =
+            await fetch(
+                `${API_BASE}/api-keys/${encodeURIComponent(id)}`,
+                {
+                    method:"DELETE",
+                    headers:
+                        authHeaders()
+                }
+            );
+
+        const data =
+            await response.json()
+                .catch(() => ({}));
+
+        if(!response.ok){
+
+            throw new Error(
+                data.message ||
+                "Failed to revoke API key."
+            );
+
+        }
+
+        showToast(
+            "API key revoked."
+        );
+
+        await loadKeys();
+
+    }catch(error){
+
+        console.error(
+            "Revoke API key error:",
+            error
+        );
+
+        showToast(
+            error.message ||
+            "Unable to revoke API key."
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   LOGOUT
+===================================================== */
+
+function logout(){
+
+    localStorage.removeItem(
+        "scorpio_token"
+    );
+
+    localStorage.removeItem(
+        "scorpio_user"
+    );
+
+}
+
+
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
+
+function escapeHtml(value){
+
+    return String(
+        value ?? ""
+    )
+    .replace(
+        /&/g,
+        "&amp;"
+    )
+    .replace(
+        /</g,
+        "&lt;"
+    )
+    .replace(
+        />/g,
+        "&gt;"
+    )
+    .replace(
+        /"/g,
+        "&quot;"
+    )
+    .replace(
+        /'/g,
+        "&#039;"
+    );
+
+}
+
+
+/* =====================================================
+   ESCAPE JS
+===================================================== */
+
+function escapeJs(value){
+
+    return String(
+        value ?? ""
+    )
+    .replace(
+        /\\/g,
+        "\\\\"
+    )
+    .replace(
+        /'/g,
+        "\\'"
+    )
+    .replace(
+        /"/g,
+        '\\"'
+    )
+    .replace(
+        /\n/g,
+        "\\n"
+    )
+    .replace(
+        /\r/g,
+        "\\r"
+    );
+
+}
+
+
+/* =====================================================
+   CLOSE MODAL WHEN CLICKING OUTSIDE
+===================================================== */
+
+document
+    .getElementById("keyModal")
+    .addEventListener(
+        "click",
+        function(event){
+
+            if(
+                event.target ===
+                this
+            ){
+
+                closeModal();
+
+            }
+
+        }
+    );
+
+
+/* =====================================================
+   INITIALIZE
+===================================================== */
+
+loadUser();
+
+loadKeys();
+
+</script>
+
+</body>
+</html>
