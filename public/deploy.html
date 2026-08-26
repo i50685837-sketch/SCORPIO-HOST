@@ -1,0 +1,2108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#08000f">
+
+<title>Deploy Bot — Scorpio Host</title>
+
+<style>
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    min-height:100vh;
+    font-family:Arial,Helvetica,sans-serif;
+    color:white;
+
+    background:
+        radial-gradient(
+            circle at 70% 10%,
+            rgba(125,0,255,.18),
+            transparent 30%
+        ),
+        linear-gradient(
+            135deg,
+            #050008,
+            #100018,
+            #050008
+        );
+}
+
+/* =====================================================
+   SIDEBAR
+===================================================== */
+
+.sidebar{
+    position:fixed;
+    left:0;
+    top:0;
+    bottom:0;
+
+    width:245px;
+
+    padding:24px 16px;
+
+    background:rgba(13,3,21,.94);
+
+    border-right:
+        1px solid
+        rgba(180,80,255,.16);
+
+    backdrop-filter:blur(20px);
+
+    z-index:100;
+
+    transition:.3s;
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+
+    gap:12px;
+
+    margin-bottom:35px;
+}
+
+.brand-icon{
+    width:43px;
+    height:43px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border:1px solid #a900ff;
+
+    border-radius:50%;
+
+    color:#d38aff;
+
+    font-size:22px;
+
+    box-shadow:
+        0 0 18px
+        rgba(145,0,255,.55);
+}
+
+.brand h2{
+    font-size:17px;
+    letter-spacing:2px;
+}
+
+.brand small{
+    display:block;
+
+    margin-top:3px;
+
+    color:#8e7c97;
+
+    font-size:9px;
+}
+
+.nav-title{
+    color:#675b70;
+
+    font-size:9px;
+
+    letter-spacing:2px;
+
+    margin:20px 10px 8px;
+}
+
+.nav a{
+    display:flex;
+    align-items:center;
+
+    gap:13px;
+
+    height:45px;
+
+    padding:0 12px;
+
+    margin:4px 0;
+
+    border-radius:11px;
+
+    color:#a99bad;
+
+    text-decoration:none;
+
+    font-size:13px;
+
+    transition:.2s;
+}
+
+.nav a:hover,
+.nav a.active{
+
+    color:#fff;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(130,0,255,.25),
+            rgba(130,0,255,.06)
+        );
+
+    box-shadow:
+        inset 3px 0 #a500ff;
+}
+
+.nav-icon{
+    width:21px;
+
+    text-align:center;
+
+    font-size:17px;
+}
+
+/* =====================================================
+   MAIN
+===================================================== */
+
+.main{
+    margin-left:245px;
+
+    min-height:100vh;
+
+    padding:25px;
+
+    max-width:1500px;
+}
+
+/* =====================================================
+   TOPBAR
+===================================================== */
+
+.topbar{
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+    margin-bottom:25px;
+}
+
+.menu-btn{
+    display:none;
+
+    border:0;
+
+    background:
+        rgba(255,255,255,.05);
+
+    color:white;
+
+    font-size:22px;
+
+    padding:9px 12px;
+
+    border-radius:10px;
+
+    cursor:pointer;
+}
+
+.page-title h1{
+    font-size:27px;
+}
+
+.page-title p{
+    margin-top:5px;
+
+    color:#8f8195;
+
+    font-size:12px;
+}
+
+/* =====================================================
+   DEPLOY LAYOUT
+===================================================== */
+
+.deploy-grid{
+    display:grid;
+
+    grid-template-columns:
+        minmax(0,1.5fr)
+        minmax(280px,.8fr);
+
+    gap:20px;
+
+    align-items:start;
+}
+
+/* =====================================================
+   CARD
+===================================================== */
+
+.card{
+    border:
+        1px solid
+        rgba(190,90,255,.16);
+
+    border-radius:18px;
+
+    background:
+        rgba(255,255,255,.035);
+
+    backdrop-filter:blur(14px);
+
+    padding:22px;
+
+    margin-bottom:20px;
+}
+
+.card-header{
+    margin-bottom:20px;
+}
+
+.card-header h2{
+    font-size:17px;
+}
+
+.card-header p{
+    margin-top:6px;
+
+    color:#817486;
+
+    font-size:11px;
+
+    line-height:1.6;
+}
+
+/* =====================================================
+   PLATFORM SELECTOR
+===================================================== */
+
+.platforms{
+    display:grid;
+
+    grid-template-columns:
+        repeat(3,1fr);
+
+    gap:10px;
+
+    margin-bottom:23px;
+}
+
+.platform{
+    position:relative;
+
+    padding:17px 10px;
+
+    border:
+        1px solid
+        rgba(255,255,255,.08);
+
+    border-radius:13px;
+
+    background:
+        rgba(0,0,0,.18);
+
+    color:#aaa0ad;
+
+    cursor:pointer;
+
+    text-align:center;
+
+    transition:.2s;
+}
+
+.platform:hover{
+    transform:translateY(-2px);
+
+    border-color:
+        rgba(180,80,255,.35);
+}
+
+.platform.selected{
+    color:white;
+
+    border-color:#9c00ff;
+
+    background:
+        rgba(130,0,255,.13);
+
+    box-shadow:
+        0 0 20px
+        rgba(130,0,255,.12);
+}
+
+.platform-icon{
+    font-size:27px;
+
+    margin-bottom:9px;
+}
+
+.platform-name{
+    font-size:12px;
+
+    font-weight:bold;
+}
+
+.platform-desc{
+    margin-top:4px;
+
+    color:#716676;
+
+    font-size:9px;
+}
+
+.platform.selected .platform-desc{
+    color:#ad91ba;
+}
+
+/* =====================================================
+   FORM
+===================================================== */
+
+.field{
+    margin-bottom:17px;
+}
+
+label{
+    display:block;
+
+    margin-bottom:7px;
+
+    color:#d9c8df;
+
+    font-size:12px;
+}
+
+input,
+select,
+textarea{
+
+    width:100%;
+
+    border:
+        1px solid
+        rgba(190,90,255,.18);
+
+    outline:none;
+
+    background:
+        rgba(0,0,0,.28);
+
+    color:white;
+
+    border-radius:11px;
+
+    font-size:13px;
+
+    transition:.2s;
+}
+
+input,
+select{
+    height:50px;
+
+    padding:0 14px;
+}
+
+textarea{
+    min-height:105px;
+
+    padding:14px;
+
+    resize:vertical;
+}
+
+select{
+    appearance:none;
+}
+
+option{
+    background:#170b20;
+
+    color:white;
+}
+
+input::placeholder,
+textarea::placeholder{
+    color:#665d6b;
+}
+
+input:focus,
+select:focus,
+textarea:focus{
+
+    border-color:#a400ff;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(145,0,255,.08),
+
+        0 0 18px
+        rgba(145,0,255,.18);
+}
+
+/* =====================================================
+   GITHUB
+===================================================== */
+
+.github-row{
+    display:flex;
+
+    gap:9px;
+}
+
+.github-row input{
+    flex:1;
+}
+
+.github-btn{
+    width:105px;
+
+    border:
+        1px solid
+        rgba(190,90,255,.22);
+
+    border-radius:11px;
+
+    background:
+        rgba(255,255,255,.05);
+
+    color:white;
+
+    cursor:pointer;
+
+    font-weight:bold;
+
+    font-size:11px;
+
+    transition:.2s;
+}
+
+.github-btn:hover{
+    border-color:#a400ff;
+
+    background:
+        rgba(130,0,255,.12);
+}
+
+/* =====================================================
+   ENVIRONMENT
+===================================================== */
+
+.env-title{
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:10px;
+}
+
+.env-title span{
+    color:#d9c8df;
+
+    font-size:12px;
+}
+
+.add-env{
+    border:0;
+
+    background:none;
+
+    color:#c47aff;
+
+    cursor:pointer;
+
+    font-size:11px;
+}
+
+.env-row{
+    display:grid;
+
+    grid-template-columns:
+        1fr 1.4fr 40px;
+
+    gap:8px;
+
+    margin-bottom:8px;
+}
+
+.env-remove{
+    border:0;
+
+    border-radius:9px;
+
+    background:
+        rgba(255,0,80,.08);
+
+    color:#ff779d;
+
+    cursor:pointer;
+}
+
+/* =====================================================
+   DEPLOY BUTTON
+===================================================== */
+
+.deploy-btn{
+
+    width:100%;
+
+    height:53px;
+
+    margin-top:7px;
+
+    border:0;
+
+    border-radius:12px;
+
+    color:white;
+
+    cursor:pointer;
+
+    font-size:14px;
+
+    font-weight:bold;
+
+    background:
+        linear-gradient(
+            135deg,
+            #7200ff,
+            #b000ff
+        );
+
+    box-shadow:
+        0 0 20px
+        rgba(140,0,255,.35);
+
+    transition:.25s;
+}
+
+.deploy-btn:hover{
+
+    transform:translateY(-2px);
+
+    box-shadow:
+        0 0 30px
+        rgba(140,0,255,.55);
+}
+
+.deploy-btn:disabled{
+    opacity:.6;
+
+    cursor:not-allowed;
+
+    transform:none;
+}
+
+/* =====================================================
+   RIGHT SIDE
+===================================================== */
+
+.summary-item{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    gap:15px;
+
+    padding:12px 0;
+
+    border-bottom:
+        1px solid
+        rgba(255,255,255,.05);
+
+    font-size:11px;
+}
+
+.summary-item:last-child{
+    border-bottom:0;
+}
+
+.summary-item span:first-child{
+    color:#776c7d;
+}
+
+.summary-item span:last-child{
+    color:#d7c5df;
+
+    text-align:right;
+
+    word-break:break-word;
+}
+
+/* =====================================================
+   PLAN
+===================================================== */
+
+.plan{
+    padding:16px;
+
+    border-radius:13px;
+
+    background:
+        rgba(0,0,0,.18);
+
+    border:
+        1px solid
+        rgba(190,90,255,.12);
+
+    margin-bottom:10px;
+}
+
+.plan strong{
+    font-size:12px;
+}
+
+.plan p{
+    margin-top:6px;
+
+    color:#776c7d;
+
+    font-size:10px;
+
+    line-height:1.6;
+}
+
+.price{
+    margin-top:10px;
+
+    color:#c47aff;
+
+    font-size:14px;
+
+    font-weight:bold;
+}
+
+/* =====================================================
+   INFO
+===================================================== */
+
+.info{
+    padding:15px;
+
+    border-radius:12px;
+
+    background:
+        rgba(0,255,130,.035);
+
+    border:
+        1px solid
+        rgba(0,255,130,.08);
+}
+
+.info strong{
+    color:#6df3a6;
+
+    font-size:11px;
+}
+
+.info p{
+    margin-top:6px;
+
+    color:#766f7c;
+
+    font-size:10px;
+
+    line-height:1.6;
+}
+
+/* =====================================================
+   STATUS
+===================================================== */
+
+.status{
+    display:none;
+
+    padding:15px;
+
+    margin-bottom:18px;
+
+    border-radius:12px;
+
+    font-size:11px;
+
+    line-height:1.6;
+}
+
+.status.show{
+    display:block;
+}
+
+.status.success{
+    background:
+        rgba(0,255,130,.05);
+
+    border:
+        1px solid
+        rgba(0,255,130,.15);
+
+    color:#74f5ad;
+}
+
+.status.error{
+    background:
+        rgba(255,0,80,.05);
+
+    border:
+        1px solid
+        rgba(255,0,80,.15);
+
+    color:#ff7b9e;
+}
+
+.status.loading{
+    background:
+        rgba(130,0,255,.06);
+
+    border:
+        1px solid
+        rgba(130,0,255,.15);
+
+    color:#c993ff;
+}
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media(max-width:950px){
+
+    .deploy-grid{
+        grid-template-columns:1fr;
+    }
+
+}
+
+@media(max-width:750px){
+
+    .sidebar{
+        transform:translateX(-100%);
+    }
+
+    .sidebar.open{
+        transform:translateX(0);
+    }
+
+    .main{
+        margin-left:0;
+
+        padding:18px;
+    }
+
+    .menu-btn{
+        display:block;
+    }
+
+    .platforms{
+        grid-template-columns:1fr 1fr;
+    }
+
+}
+
+@media(max-width:520px){
+
+    .page-title h1{
+        font-size:21px;
+    }
+
+    .platforms{
+        grid-template-columns:1fr;
+    }
+
+    .github-row{
+        flex-direction:column;
+    }
+
+    .github-btn{
+        width:100%;
+
+        height:45px;
+    }
+
+    .env-row{
+        grid-template-columns:1fr 1fr 38px;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- =====================================================
+     SIDEBAR
+===================================================== -->
+
+<aside class="sidebar" id="sidebar">
+
+    <div class="brand">
+
+        <div class="brand-icon">
+            ♏
+        </div>
+
+        <div>
+
+            <h2>SCORPIO</h2>
+
+            <small>
+                HOSTING PLATFORM
+            </small>
+
+        </div>
+
+    </div>
+
+
+    <div class="nav-title">
+        MAIN
+    </div>
+
+
+    <nav class="nav">
+
+        <a href="dashboard.html">
+            <span class="nav-icon">⌂</span>
+            Dashboard
+        </a>
+
+        <a href="my-bots.html">
+            <span class="nav-icon">🤖</span>
+            My Bots
+        </a>
+
+        <a href="deploy.html" class="active">
+            <span class="nav-icon">🚀</span>
+            Deploy Bot
+        </a>
+
+        <a href="console.html">
+            <span class="nav-icon">⌘</span>
+            Console
+        </a>
+
+        <a href="monitoring.html">
+            <span class="nav-icon">📊</span>
+            Monitoring
+        </a>
+
+
+        <div class="nav-title">
+            ACCOUNT
+        </div>
+
+
+        <a href="wallet.html">
+            <span class="nav-icon">💳</span>
+            Wallet
+        </a>
+
+        <a href="billing.html">
+            <span class="nav-icon">💰</span>
+            Billing
+        </a>
+
+        <a href="api-keys.html">
+            <span class="nav-icon">🔑</span>
+            API Keys
+        </a>
+
+        <a href="settings.html">
+            <span class="nav-icon">⚙️</span>
+            Settings
+        </a>
+
+        <a href="login.html" onclick="logout()">
+            <span class="nav-icon">↪</span>
+            Logout
+        </a>
+
+    </nav>
+
+</aside>
+
+
+<!-- =====================================================
+     MAIN
+===================================================== -->
+
+<main class="main">
+
+
+    <div class="topbar">
+
+        <button
+            class="menu-btn"
+            onclick="toggleSidebar()"
+        >
+            ☰
+        </button>
+
+
+        <div class="page-title">
+
+            <h1>
+                Deploy Bot
+            </h1>
+
+            <p>
+                Launch your WhatsApp, Telegram or Discord bot.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         DEPLOY GRID
+    ================================================= -->
+
+    <section class="deploy-grid">
+
+
+        <!-- =================================================
+             LEFT FORM
+        ================================================= -->
+
+        <div>
+
+            <div
+                id="status"
+                class="status"
+            ></div>
+
+
+            <div class="card">
+
+                <div class="card-header">
+
+                    <h2>
+                        Create Deployment
+                    </h2>
+
+                    <p>
+                        Connect your GitHub repository and configure
+                        your bot environment.
+                    </p>
+
+                </div>
+
+
+                <!-- PLATFORM -->
+
+                <div class="field">
+
+                    <label>
+                        Select Platform
+                    </label>
+
+
+                    <div class="platforms">
+
+                        <div
+                            class="platform selected"
+                            data-platform="whatsapp"
+                            onclick="selectPlatform(this)"
+                        >
+
+                            <div class="platform-icon">
+                                💬
+                            </div>
+
+                            <div class="platform-name">
+                                WhatsApp
+                            </div>
+
+                            <div class="platform-desc">
+                                Baileys / Node.js
+                            </div>
+
+                        </div>
+
+
+                        <div
+                            class="platform"
+                            data-platform="telegram"
+                            onclick="selectPlatform(this)"
+                        >
+
+                            <div class="platform-icon">
+                                ✈️
+                            </div>
+
+                            <div class="platform-name">
+                                Telegram
+                            </div>
+
+                            <div class="platform-desc">
+                                Bot API
+                            </div>
+
+                        </div>
+
+
+                        <div
+                            class="platform"
+                            data-platform="discord"
+                            onclick="selectPlatform(this)"
+                        >
+
+                            <div class="platform-icon">
+                                🎮
+                            </div>
+
+                            <div class="platform-name">
+                                Discord
+                            </div>
+
+                            <div class="platform-desc">
+                                Discord.js
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- BOT NAME -->
+
+                <div class="field">
+
+                    <label for="botName">
+                        Bot Name
+                    </label>
+
+                    <input
+                        id="botName"
+                        type="text"
+                        placeholder="e.g. Morde Bot"
+                        maxlength="50"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- GITHUB -->
+
+                <div class="field">
+
+                    <label for="repository">
+                        GitHub Repository
+                    </label>
+
+
+                    <div class="github-row">
+
+                        <input
+                            id="repository"
+                            type="text"
+                            placeholder="https://github.com/username/repository"
+                        >
+
+                        <button
+                            type="button"
+                            class="github-btn"
+                            onclick="validateRepository()"
+                        >
+                            Check Repo
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- BRANCH -->
+
+                <div class="field">
+
+                    <label for="branch">
+                        Branch
+                    </label>
+
+                    <input
+                        id="branch"
+                        type="text"
+                        value="main"
+                        placeholder="main"
+                    >
+
+                </div>
+
+
+                <!-- START COMMAND -->
+
+                <div class="field">
+
+                    <label for="startCommand">
+                        Start Command
+                    </label>
+
+                    <input
+                        id="startCommand"
+                        type="text"
+                        placeholder="npm start"
+                        value="npm start"
+                    >
+
+                </div>
+
+
+                <!-- PLAN -->
+
+                <div class="field">
+
+                    <label for="plan">
+                        Hosting Plan
+                    </label>
+
+                    <select id="plan">
+
+                        <option value="free">
+                            Free — Basic Resources
+                        </option>
+
+                        <option value="starter">
+                            Starter — KES 100/month
+                        </option>
+
+                        <option value="pro">
+                            Pro — KES 300/month
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- ENVIRONMENT -->
+
+                <div class="field">
+
+                    <div class="env-title">
+
+                        <span>
+                            Environment Variables
+                        </span>
+
+                        <button
+                            type="button"
+                            class="add-env"
+                            onclick="addEnvironmentVariable()"
+                        >
+                            + Add Variable
+                        </button>
+
+                    </div>
+
+
+                    <div id="envContainer">
+
+                        <div class="env-row">
+
+                            <input
+                                type="text"
+                                class="env-key"
+                                placeholder="KEY"
+                            >
+
+                            <input
+                                type="password"
+                                class="env-value"
+                                placeholder="VALUE"
+                            >
+
+                            <button
+                                type="button"
+                                class="env-remove"
+                                onclick="removeEnvironmentVariable(this)"
+                            >
+                                ×
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- DEPLOY -->
+
+                <button
+                    type="button"
+                    id="deployBtn"
+                    class="deploy-btn"
+                    onclick="deployBot()"
+                >
+                    🚀 Deploy Bot
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             RIGHT
+        ================================================= -->
+
+        <div>
+
+
+            <!-- SUMMARY -->
+
+            <div class="card">
+
+                <div class="card-header">
+
+                    <h2>
+                        Deployment Summary
+                    </h2>
+
+                </div>
+
+
+                <div class="summary-item">
+
+                    <span>
+                        Platform
+                    </span>
+
+                    <span id="summaryPlatform">
+                        WhatsApp
+                    </span>
+
+                </div>
+
+
+                <div class="summary-item">
+
+                    <span>
+                        Bot
+                    </span>
+
+                    <span id="summaryBot">
+                        Not configured
+                    </span>
+
+                </div>
+
+
+                <div class="summary-item">
+
+                    <span>
+                        Repository
+                    </span>
+
+                    <span id="summaryRepo">
+                        Not connected
+                    </span>
+
+                </div>
+
+
+                <div class="summary-item">
+
+                    <span>
+                        Branch
+                    </span>
+
+                    <span id="summaryBranch">
+                        main
+                    </span>
+
+                </div>
+
+
+                <div class="summary-item">
+
+                    <span>
+                        Plan
+                    </span>
+
+                    <span id="summaryPlan">
+                        Free
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- PLANS -->
+
+            <div class="card">
+
+                <div class="card-header">
+
+                    <h2>
+                        Hosting Plans
+                    </h2>
+
+                </div>
+
+
+                <div class="plan">
+
+                    <strong>
+                        Free
+                    </strong>
+
+                    <p>
+                        Good for testing small bots
+                        and development projects.
+                    </p>
+
+                    <div class="price">
+                        KES 0
+                    </div>
+
+                </div>
+
+
+                <div class="plan">
+
+                    <strong>
+                        Starter
+                    </strong>
+
+                    <p>
+                        More resources for bots that
+                        need reliable uptime.
+                    </p>
+
+                    <div class="price">
+                        KES 100 / month
+                    </div>
+
+                </div>
+
+
+                <div class="plan">
+
+                    <strong>
+                        Pro
+                    </strong>
+
+                    <p>
+                        Higher resources for larger
+                        production bots.
+                    </p>
+
+                    <div class="price">
+                        KES 300 / month
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- INFO -->
+
+            <div class="card">
+
+                <div class="card-header">
+
+                    <h2>
+                        Before You Deploy
+                    </h2>
+
+                </div>
+
+
+                <div class="info">
+
+                    <strong>
+                        ● GitHub repository required
+                    </strong>
+
+                    <p>
+                        Your repository should contain a valid
+                        package.json and the correct start command.
+                        Keep sensitive API keys inside environment
+                        variables instead of committing them to GitHub.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<script>
+
+/* =====================================================
+   SIDEBAR
+===================================================== */
+
+function toggleSidebar(){
+
+    document
+        .getElementById("sidebar")
+        .classList.toggle("open");
+
+}
+
+
+/* =====================================================
+   LOGOUT
+===================================================== */
+
+function logout(){
+
+    localStorage.removeItem(
+        "scorpio_token"
+    );
+
+    localStorage.removeItem(
+        "scorpio_user"
+    );
+
+}
+
+
+/* =====================================================
+   AUTH CHECK
+===================================================== */
+
+function getToken(){
+
+    return localStorage.getItem(
+        "scorpio_token"
+    );
+
+}
+
+
+/* =====================================================
+   PLATFORM
+===================================================== */
+
+let selectedPlatform =
+    "whatsapp";
+
+
+function selectPlatform(element){
+
+    document
+        .querySelectorAll(".platform")
+        .forEach(
+            item => item.classList.remove("selected")
+        );
+
+    element.classList.add("selected");
+
+    selectedPlatform =
+        element.dataset.platform;
+
+    document
+        .getElementById("summaryPlatform")
+        .textContent =
+            selectedPlatform
+                .charAt(0)
+                .toUpperCase()
+            +
+            selectedPlatform.slice(1);
+
+}
+
+
+/* =====================================================
+   ENVIRONMENT VARIABLES
+===================================================== */
+
+function addEnvironmentVariable(){
+
+    const container =
+        document.getElementById(
+            "envContainer"
+        );
+
+
+    const row =
+        document.createElement(
+            "div"
+        );
+
+    row.className =
+        "env-row";
+
+
+    row.innerHTML = `
+
+        <input
+            type="text"
+            class="env-key"
+            placeholder="KEY"
+        >
+
+        <input
+            type="password"
+            class="env-value"
+            placeholder="VALUE"
+        >
+
+        <button
+            type="button"
+            class="env-remove"
+            onclick="removeEnvironmentVariable(this)"
+        >
+            ×
+        </button>
+
+    `;
+
+
+    container.appendChild(row);
+
+}
+
+
+function removeEnvironmentVariable(button){
+
+    const rows =
+        document.querySelectorAll(
+            ".env-row"
+        );
+
+    if(rows.length <= 1){
+
+        button
+            .parentElement
+            .querySelector(".env-key")
+            .value = "";
+
+        button
+            .parentElement
+            .querySelector(".env-value")
+            .value = "";
+
+        return;
+
+    }
+
+    button
+        .parentElement
+        .remove();
+
+}
+
+
+/* =====================================================
+   STATUS
+===================================================== */
+
+function showStatus(
+    message,
+    type
+){
+
+    const status =
+        document.getElementById(
+            "status"
+        );
+
+    status.textContent =
+        message;
+
+    status.className =
+        "status show " +
+        type;
+
+}
+
+
+/* =====================================================
+   REPOSITORY VALIDATION
+===================================================== */
+
+function validateRepository(){
+
+    const repository =
+        document
+            .getElementById(
+                "repository"
+            )
+            .value
+            .trim();
+
+    if(!repository){
+
+        showStatus(
+            "Enter your GitHub repository URL first.",
+            "error"
+        );
+
+        return;
+
+    }
+
+    if(
+        !repository.startsWith(
+            "https://github.com/"
+        )
+    ){
+
+        showStatus(
+            "Please enter a valid GitHub repository URL.",
+            "error"
+        );
+
+        return;
+
+    }
+
+    showStatus(
+        "GitHub repository format looks valid.",
+        "success"
+    );
+
+    document
+        .getElementById(
+            "summaryRepo"
+        )
+        .textContent =
+            repository;
+
+}
+
+
+/* =====================================================
+   COLLECT ENVIRONMENT VARIABLES
+===================================================== */
+
+function getEnvironmentVariables(){
+
+    const rows =
+        document.querySelectorAll(
+            ".env-row"
+        );
+
+    const env = {};
+
+    rows.forEach(
+        row => {
+
+            const key =
+                row
+                    .querySelector(
+                        ".env-key"
+                    )
+                    .value
+                    .trim();
+
+            const value =
+                row
+                    .querySelector(
+                        ".env-value"
+                    )
+                    .value;
+
+            if(key){
+
+                env[key] =
+                    value;
+
+            }
+
+        }
+    );
+
+    return env;
+
+}
+
+
+/* =====================================================
+   DEPLOY BOT
+===================================================== */
+
+async function deployBot(){
+
+    const token =
+        getToken();
+
+
+    if(!token){
+
+        showStatus(
+            "Your session has expired. Please login again.",
+            "error"
+        );
+
+        setTimeout(
+            () => {
+                window.location.href =
+                    "login.html";
+            },
+            1200
+        );
+
+        return;
+
+    }
+
+
+    const botName =
+        document
+            .getElementById(
+                "botName"
+            )
+            .value
+            .trim();
+
+
+    const repository =
+        document
+            .getElementById(
+                "repository"
+            )
+            .value
+            .trim();
+
+
+    const branch =
+        document
+            .getElementById(
+                "branch"
+            )
+            .value
+            .trim()
+            ||
+            "main";
+
+
+    const startCommand =
+        document
+            .getElementById(
+                "startCommand"
+            )
+            .value
+            .trim()
+            ||
+            "npm start";
+
+
+    const plan =
+        document
+            .getElementById(
+                "plan"
+            )
+            .value;
+
+
+    if(!botName){
+
+        showStatus(
+            "Enter a bot name.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    if(!repository){
+
+        showStatus(
+            "Enter your GitHub repository URL.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    if(
+        !repository.startsWith(
+            "https://github.com/"
+        )
+    ){
+
+        showStatus(
+            "Please enter a valid GitHub repository URL.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    const deployBtn =
+        document.getElementById(
+            "deployBtn"
+        );
+
+
+    deployBtn.disabled =
+        true;
+
+    deployBtn.textContent =
+        "⏳ Creating deployment...";
+
+
+    showStatus(
+        "Connecting to Scorpio Host deployment service...",
+        "loading"
+    );
+
+
+    const payload = {
+
+        name:
+            botName,
+
+        botName:
+            botName,
+
+        platform:
+            selectedPlatform,
+
+        type:
+            selectedPlatform,
+
+        repository:
+            repository,
+
+        repo:
+            repository,
+
+        branch:
+            branch,
+
+        startCommand:
+            startCommand,
+
+        plan:
+            plan,
+
+        environment:
+            getEnvironmentVariables()
+
+    };
+
+
+    try{
+
+        const response =
+            await fetch(
+                "/api/deployments",
+                {
+                    method:"POST",
+
+                    headers:{
+                        "Content-Type":
+                            "application/json",
+
+                        "Authorization":
+                            `Bearer ${token}`
+                    },
+
+                    body:
+                        JSON.stringify(
+                            payload
+                        )
+                }
+            );
+
+
+        let data = {};
+
+        try{
+
+            data =
+                await response.json();
+
+        }catch{
+
+            data = {};
+
+        }
+
+
+        if(!response.ok){
+
+            throw new Error(
+                data.message ||
+                data.error ||
+                `Deployment failed (${response.status})`
+            );
+
+        }
+
+
+        showStatus(
+            data.message ||
+            "Bot deployment created successfully.",
+            "success"
+        );
+
+
+        if(
+            data.deployment ||
+            data.bot
+        ){
+
+            setTimeout(
+                () => {
+
+                    window.location.href =
+                        "my-bots.html";
+
+                },
+                1500
+            );
+
+        }
+
+
+    }catch(error){
+
+        console.error(
+            "Deployment error:",
+            error
+        );
+
+
+        showStatus(
+            error.message ||
+            "Unable to create deployment.",
+            "error"
+        );
+
+
+    }finally{
+
+        deployBtn.disabled =
+            false;
+
+        deployBtn.textContent =
+            "🚀 Deploy Bot";
+
+    }
+
+}
+
+
+/* =====================================================
+   LIVE SUMMARY
+===================================================== */
+
+document
+    .getElementById("botName")
+    .addEventListener(
+        "input",
+        function(){
+
+            document
+                .getElementById(
+                    "summaryBot"
+                )
+                .textContent =
+                    this.value.trim()
+                    ||
+                    "Not configured";
+
+        }
+    );
+
+
+document
+    .getElementById("repository")
+    .addEventListener(
+        "input",
+        function(){
+
+            document
+                .getElementById(
+                    "summaryRepo"
+                )
+                .textContent =
+                    this.value.trim()
+                    ||
+                    "Not connected";
+
+        }
+    );
+
+
+document
+    .getElementById("branch")
+    .addEventListener(
+        "input",
+        function(){
+
+            document
+                .getElementById(
+                    "summaryBranch"
+                )
+                .textContent =
+                    this.value.trim()
+                    ||
+                    "main";
+
+        }
+    );
+
+
+document
+    .getElementById("plan")
+    .addEventListener(
+        "change",
+        function(){
+
+            const selected =
+                this.options[
+                    this.selectedIndex
+                ];
+
+            document
+                .getElementById(
+                    "summaryPlan"
+                )
+                .textContent =
+                    selected.text
+                        .split("—")[0]
+                        .trim();
+
+        }
+    );
+
+
+/* =====================================================
+   INITIAL SUMMARY
+===================================================== */
+
+document
+    .getElementById(
+        "summaryPlan"
+    )
+    .textContent =
+        "Free";
+
+</script>
+
+</body>
+</html>
