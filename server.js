@@ -1167,4 +1167,90 @@ const server =
                 `🌐 Environment: ${NODE_ENV}`
             );
 
+           
+            console.log(
+                `🌍 App URL: ${APP_URL}`
+            );
+
+            console.log(
+                `💳 IntaSend: ${
+                    INTASEND_TEST_MODE
+                        ? "SANDBOX"
+                        : "LIVE"
+                }`
+            );
+
+            console.log(
+                "📱 STK endpoint:"
+            );
+
+            console.log(
+                `${APP_URL}/api/payment/stk`
+            );
+
+            console.log(
+                "🔔 Webhook endpoint:"
+            );
+
+            console.log(
+                `${APP_URL}/api/payment/intasend/webhook`
+            );
+
+            console.log(
+                "=========================================="
+            );
+
+        }
+    );
+
+/* =========================================================
+   GRACEFUL SHUTDOWN
+========================================================= */
+
+async function shutdown(
+    signal
+) {
+
+    console.log(
+        `\n⚠️ ${signal} received. Shutting down...`
+    );
+
+    server.close(
+        async () => {
+
+            try {
+
+                await mongoose.connection.close();
+
+                console.log(
+                    "✅ MongoDB connection closed"
+                );
+
+                process.exit(0);
+
+            } catch (error) {
+
+                console.error(
+                    "❌ Shutdown error:",
+                    error.message
+                );
+
+                process.exit(1);
+
+            }
+
+        }
+    );
+
+}
+
+process.on(
+    "SIGTERM",
+    () => shutdown("SIGTERM")
+);
+
+process.on(
+    "SIGINT",
+    () => shutdown("SIGINT")
+);
   
