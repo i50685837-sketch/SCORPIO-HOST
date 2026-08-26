@@ -1,0 +1,1554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#08000f">
+
+<title>Billing — Scorpio Host</title>
+
+<style>
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    min-height:100vh;
+    font-family:Arial,Helvetica,sans-serif;
+    color:#fff;
+
+    background:
+        radial-gradient(
+            circle at 70% 10%,
+            rgba(125,0,255,.20),
+            transparent 30%
+        ),
+        linear-gradient(
+            135deg,
+            #050008,
+            #100018,
+            #050008
+        );
+}
+
+/* =========================
+   SIDEBAR
+========================= */
+
+.sidebar{
+    position:fixed;
+    left:0;
+    top:0;
+    bottom:0;
+    width:245px;
+
+    padding:24px 16px;
+
+    background:rgba(13,3,21,.94);
+
+    border-right:
+        1px solid
+        rgba(180,80,255,.16);
+
+    backdrop-filter:blur(20px);
+
+    z-index:100;
+
+    transition:.3s;
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-bottom:35px;
+}
+
+.brand-icon{
+    width:43px;
+    height:43px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border:1px solid #a900ff;
+    border-radius:50%;
+
+    color:#d38aff;
+    font-size:22px;
+
+    box-shadow:
+        0 0 18px
+        rgba(145,0,255,.55);
+}
+
+.brand h2{
+    font-size:17px;
+    letter-spacing:2px;
+}
+
+.brand small{
+    display:block;
+    margin-top:3px;
+    color:#8e7c97;
+    font-size:9px;
+}
+
+.nav-title{
+    color:#675b70;
+    font-size:9px;
+    letter-spacing:2px;
+    margin:20px 10px 8px;
+}
+
+.nav a{
+    display:flex;
+    align-items:center;
+    gap:13px;
+
+    height:45px;
+
+    padding:0 12px;
+
+    margin:4px 0;
+
+    border-radius:11px;
+
+    color:#a99bad;
+
+    text-decoration:none;
+
+    font-size:13px;
+
+    transition:.2s;
+}
+
+.nav a:hover,
+.nav a.active{
+    color:#fff;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(130,0,255,.25),
+            rgba(130,0,255,.06)
+        );
+
+    box-shadow:
+        inset 3px 0 #a500ff;
+}
+
+.nav-icon{
+    width:21px;
+    text-align:center;
+    font-size:17px;
+}
+
+/* =========================
+   MAIN
+========================= */
+
+.main{
+    margin-left:245px;
+    min-height:100vh;
+    padding:25px;
+}
+
+.topbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:25px;
+}
+
+.menu-btn{
+    display:none;
+
+    border:0;
+
+    background:
+        rgba(255,255,255,.05);
+
+    color:#fff;
+
+    font-size:22px;
+
+    padding:9px 12px;
+
+    border-radius:10px;
+}
+
+.title h1{
+    font-size:27px;
+}
+
+.title p{
+    color:#8f8195;
+    font-size:12px;
+    margin-top:5px;
+}
+
+.profile{
+    display:flex;
+    align-items:center;
+    gap:11px;
+}
+
+.avatar{
+    width:40px;
+    height:40px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:50%;
+
+    background:
+        linear-gradient(
+            135deg,
+            #7100ff,
+            #b000ff
+        );
+
+    font-weight:bold;
+
+    box-shadow:
+        0 0 18px
+        rgba(140,0,255,.35);
+}
+
+/* =========================
+   SUMMARY
+========================= */
+
+.summary{
+    display:grid;
+
+    grid-template-columns:
+        repeat(3,1fr);
+
+    gap:15px;
+
+    margin-bottom:20px;
+}
+
+.summary-card{
+    padding:20px;
+
+    border-radius:17px;
+
+    border:
+        1px solid
+        rgba(190,90,255,.16);
+
+    background:
+        rgba(255,255,255,.035);
+
+    backdrop-filter:blur(14px);
+}
+
+.summary-label{
+    color:#8d8094;
+    font-size:10px;
+    letter-spacing:.5px;
+}
+
+.summary-value{
+    margin-top:9px;
+    font-size:24px;
+    font-weight:bold;
+}
+
+.purple{
+    color:#d18aff;
+    text-shadow:
+        0 0 15px
+        rgba(160,0,255,.45);
+}
+
+.green{
+    color:#74f5ad;
+}
+
+.blue{
+    color:#87c7ff;
+}
+
+/* =========================
+   CONTENT GRID
+========================= */
+
+.grid{
+    display:grid;
+
+    grid-template-columns:
+        1.5fr 1fr;
+
+    gap:20px;
+}
+
+.card{
+    padding:21px;
+
+    margin-bottom:20px;
+
+    border-radius:18px;
+
+    border:
+        1px solid
+        rgba(190,90,255,.16);
+
+    background:
+        rgba(255,255,255,.035);
+
+    backdrop-filter:blur(14px);
+}
+
+.card-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    margin-bottom:18px;
+}
+
+.card-header h2{
+    font-size:16px;
+}
+
+.card-header span{
+    color:#786b7f;
+    font-size:10px;
+}
+
+/* =========================
+   PLAN
+========================= */
+
+.plan{
+    padding:18px;
+
+    border-radius:14px;
+
+    background:
+        rgba(0,0,0,.18);
+
+    border:
+        1px solid
+        rgba(255,255,255,.05);
+
+    margin-bottom:10px;
+}
+
+.plan-top{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+}
+
+.plan-name{
+    font-size:13px;
+    font-weight:bold;
+}
+
+.plan-price{
+    color:#d18aff;
+    font-size:13px;
+    font-weight:bold;
+}
+
+.plan p{
+    margin-top:7px;
+
+    color:#776b7c;
+
+    font-size:10px;
+
+    line-height:1.6;
+}
+
+.plan-status{
+    margin-top:12px;
+
+    display:inline-block;
+
+    padding:5px 8px;
+
+    border-radius:7px;
+
+    color:#6df3a6;
+
+    background:
+        rgba(0,255,130,.06);
+
+    border:
+        1px solid
+        rgba(0,255,130,.10);
+
+    font-size:9px;
+}
+
+/* =========================
+   TRANSACTIONS
+========================= */
+
+.transaction{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    padding:13px;
+
+    margin-bottom:8px;
+
+    border-radius:11px;
+
+    background:
+        rgba(0,0,0,.18);
+
+    border:
+        1px solid
+        rgba(255,255,255,.04);
+}
+
+.transaction-left{
+    display:flex;
+    align-items:center;
+    gap:11px;
+}
+
+.transaction-icon{
+    width:37px;
+    height:37px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:9px;
+
+    background:
+        rgba(130,0,255,.13);
+}
+
+.transaction-title{
+    font-size:11px;
+    font-weight:bold;
+}
+
+.transaction-date{
+    margin-top:4px;
+    color:#6e6474;
+    font-size:9px;
+}
+
+.transaction-right{
+    text-align:right;
+}
+
+.amount{
+    font-size:11px;
+    font-weight:bold;
+    color:#72f2a5;
+}
+
+.failed{
+    color:#ff7182;
+}
+
+.pending{
+    color:#d7b86c;
+}
+
+.empty{
+    text-align:center;
+    padding:30px 10px;
+    color:#716778;
+    font-size:11px;
+}
+
+/* =========================
+   BILLING INFO
+========================= */
+
+.info-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    padding:14px 0;
+
+    border-bottom:
+        1px solid
+        rgba(255,255,255,.05);
+}
+
+.info-row:last-child{
+    border-bottom:0;
+}
+
+.info-label{
+    color:#817487;
+    font-size:11px;
+}
+
+.info-value{
+    color:#ddd;
+    font-size:11px;
+    font-weight:bold;
+}
+
+.status{
+    color:#6df3a6;
+}
+
+.billing-note{
+    padding:14px;
+
+    border-radius:12px;
+
+    background:
+        rgba(130,0,255,.06);
+
+    border:
+        1px solid
+        rgba(160,0,255,.10);
+
+    color:#8c7e91;
+
+    font-size:10px;
+
+    line-height:1.7;
+}
+
+/* =========================
+   BUTTON
+========================= */
+
+.btn{
+    display:block;
+
+    width:100%;
+
+    padding:13px;
+
+    margin-top:15px;
+
+    border:0;
+
+    border-radius:10px;
+
+    color:#fff;
+
+    text-align:center;
+
+    text-decoration:none;
+
+    font-size:12px;
+
+    font-weight:bold;
+
+    background:
+        linear-gradient(
+            135deg,
+            #7200ff,
+            #b000ff
+        );
+
+    box-shadow:
+        0 0 20px
+        rgba(140,0,255,.25);
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:900px){
+
+    .grid{
+        grid-template-columns:1fr;
+    }
+
+    .summary{
+        grid-template-columns:
+            repeat(2,1fr);
+    }
+
+}
+
+@media(max-width:750px){
+
+    .sidebar{
+        transform:
+            translateX(-100%);
+    }
+
+    .sidebar.open{
+        transform:
+            translateX(0);
+    }
+
+    .main{
+        margin-left:0;
+        padding:18px;
+    }
+
+    .menu-btn{
+        display:block;
+    }
+
+    .title{
+        flex:1;
+    }
+
+    .title h1{
+        font-size:21px;
+    }
+
+    .profile{
+        display:none;
+    }
+
+}
+
+@media(max-width:500px){
+
+    .summary{
+        grid-template-columns:
+            1fr 1fr;
+    }
+
+    .summary-card{
+        padding:15px;
+    }
+
+    .summary-value{
+        font-size:19px;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- =========================
+     SIDEBAR
+========================= -->
+
+<aside class="sidebar" id="sidebar">
+
+    <div class="brand">
+
+        <div class="brand-icon">
+            ♏
+        </div>
+
+        <div>
+
+            <h2>SCORPIO</h2>
+
+            <small>
+                HOSTING PLATFORM
+            </small>
+
+        </div>
+
+    </div>
+
+    <div class="nav-title">
+        MAIN
+    </div>
+
+    <nav class="nav">
+
+        <a href="dashboard.html">
+            <span class="nav-icon">⌂</span>
+            Dashboard
+        </a>
+
+        <a href="my-bots.html">
+            <span class="nav-icon">🤖</span>
+            My Bots
+        </a>
+
+        <a href="deploy.html">
+            <span class="nav-icon">🚀</span>
+            Deploy Bot
+        </a>
+
+        <a href="console.html">
+            <span class="nav-icon">⌘</span>
+            Console
+        </a>
+
+        <a href="monitoring.html">
+            <span class="nav-icon">📊</span>
+            Monitoring
+        </a>
+
+        <div class="nav-title">
+            ACCOUNT
+        </div>
+
+        <a href="wallet.html">
+            <span class="nav-icon">💳</span>
+            Wallet
+        </a>
+
+        <a href="billing.html" class="active">
+            <span class="nav-icon">💰</span>
+            Billing
+        </a>
+
+        <a href="api-keys.html">
+            <span class="nav-icon">🔑</span>
+            API Keys
+        </a>
+
+        <a href="settings.html">
+            <span class="nav-icon">⚙️</span>
+            Settings
+        </a>
+
+        <a
+            href="login.html"
+            onclick="logout()"
+        >
+            <span class="nav-icon">↪</span>
+            Logout
+        </a>
+
+    </nav>
+
+</aside>
+
+
+<!-- =========================
+     MAIN
+========================= -->
+
+<main class="main">
+
+    <div class="topbar">
+
+        <button
+            class="menu-btn"
+            onclick="toggleSidebar()"
+        >
+            ☰
+        </button>
+
+        <div class="title">
+
+            <h1>
+                Billing
+            </h1>
+
+            <p>
+                Manage your Scorpio Host usage and payments.
+            </p>
+
+        </div>
+
+        <div class="profile">
+
+            <div>
+                <strong id="userName">
+                    User
+                </strong>
+            </div>
+
+            <div
+                class="avatar"
+                id="avatar"
+            >
+                U
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         SUMMARY
+    ========================= -->
+
+    <section class="summary">
+
+        <div class="summary-card">
+
+            <div class="summary-label">
+                CURRENT BALANCE
+            </div>
+
+            <div class="summary-value purple">
+                KES
+                <span id="balance">
+                    0.00
+                </span>
+            </div>
+
+        </div>
+
+
+        <div class="summary-card">
+
+            <div class="summary-label">
+                TOTAL DEPOSITED
+            </div>
+
+            <div class="summary-value green">
+                KES
+                <span id="totalDeposited">
+                    0.00
+                </span>
+            </div>
+
+        </div>
+
+
+        <div class="summary-card">
+
+            <div class="summary-label">
+                ACCOUNT STATUS
+            </div>
+
+            <div class="summary-value blue">
+                Active
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <section class="grid">
+
+        <!-- =========================
+             BILLING DETAILS
+        ========================= -->
+
+        <div>
+
+            <div class="card">
+
+                <div class="card-header">
+
+                    <h2>
+                        Billing Overview
+                    </h2>
+
+                    <span>
+                        Scorpio Host
+                    </span>
+
+                </div>
+
+
+                <div class="info-row">
+
+                    <span class="info-label">
+                        Billing currency
+                    </span>
+
+                    <span class="info-value">
+                        KES
+                    </span>
+
+                </div>
+
+
+                <div class="info-row">
+
+                    <span class="info-label">
+                        Account status
+                    </span>
+
+                    <span class="info-value status">
+                        ● Active
+                    </span>
+
+                </div>
+
+
+                <div class="info-row">
+
+                    <span class="info-label">
+                        Payment provider
+                    </span>
+
+                    <span class="info-value">
+                        M-Pesa
+                    </span>
+
+                </div>
+
+
+                <div class="info-row">
+
+                    <span class="info-label">
+                        Payment gateway
+                    </span>
+
+                    <span class="info-value">
+                        IntaSend
+                    </span>
+
+                </div>
+
+
+                <a
+                    href="wallet.html"
+                    class="btn"
+                >
+                    💳 Add Funds
+                </a>
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="card-header">
+
+                    <h2>
+                        Hosting Usage
+                    </h2>
+
+                </div>
+
+
+                <div class="info-row">
+
+                    <span class="info-label">
+                        Bot hosting
+                    </span>
+
+                    <span class="info-value">
+                        Based on active services
+                    </span>
+
+                </div>
+
+
+                <div class="info-row">
+
+                    <span class="info-label">
+                        Storage
+                    </span>
+
+                    <span class="info-value">
+                        Usage based
+                    </span>
+
+                </div>
+
+
+                <div class="info-row">
+
+                    <span class="info-label">
+                        Bandwidth
+                    </span>
+
+                    <span class="info-value">
+                        Usage based
+                    </span>
+
+                </div>
+
+
+                <div class="info-row">
+
+                    <span class="info-label">
+                        Billing status
+                    </span>
+
+                    <span class="info-value status">
+                        No outstanding invoice
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =========================
+             RIGHT
+        ========================= -->
+
+        <div>
+
+            <div class="card">
+
+                <div class="card-header">
+
+                    <h2>
+                        Recent Payments
+                    </h2>
+
+                    <span>
+                        Latest 10
+                    </span>
+
+                </div>
+
+
+                <div id="transactions">
+
+                    <div class="empty">
+                        Loading payments...
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="card-header">
+
+                    <h2>
+                        Payment Information
+                    </h2>
+
+                </div>
+
+
+                <div class="billing-note">
+
+                    Payments made through the Scorpio Host
+                    wallet are recorded in your transaction
+                    history. Completed M-Pesa deposits increase
+                    your available wallet balance.
+
+                </div>
+
+
+                <a
+                    href="wallet.html"
+                    class="btn"
+                >
+                    Open Wallet
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<script>
+
+/* =========================================
+   AUTH
+========================================= */
+
+function getToken(){
+
+    return localStorage.getItem(
+        "scorpio_token"
+    );
+
+}
+
+
+function authHeaders(){
+
+    return {
+
+        "Content-Type":
+            "application/json",
+
+        "Authorization":
+            "Bearer " +
+            getToken()
+
+    };
+
+}
+
+
+/* =========================================
+   AUTH CHECK
+========================================= */
+
+function checkAuth(){
+
+    if(!getToken()){
+
+        window.location.href =
+            "login.html";
+
+        return false;
+
+    }
+
+    return true;
+
+}
+
+
+/* =========================================
+   USER
+========================================= */
+
+function loadUser(){
+
+    try{
+
+        const user =
+            JSON.parse(
+                localStorage.getItem(
+                    "scorpio_user"
+                )
+            );
+
+        if(!user){
+            return;
+        }
+
+        const name =
+            user.name ||
+            user.username ||
+            user.email ||
+            "User";
+
+        document
+            .getElementById("userName")
+            .textContent =
+                name;
+
+        document
+            .getElementById("avatar")
+            .textContent =
+                name
+                    .charAt(0)
+                    .toUpperCase();
+
+    }catch(error){
+
+        console.log(
+            "Unable to load user."
+        );
+
+    }
+
+}
+
+
+/* =========================================
+   LOAD WALLET
+========================================= */
+
+async function loadWallet(){
+
+    try{
+
+        const response =
+            await fetch(
+                "/api/wallet",
+                {
+                    method:"GET",
+                    headers:
+                        authHeaders()
+                }
+            );
+
+        if(response.status === 401){
+
+            logout();
+
+            return;
+
+        }
+
+        const data =
+            await response.json();
+
+        if(!response.ok){
+
+            throw new Error(
+                data.message ||
+                "Unable to load wallet"
+            );
+
+        }
+
+        const wallet =
+            data.wallet || {};
+
+        const balance =
+            Number(
+                wallet.balance || 0
+            );
+
+        const deposited =
+            Number(
+                wallet.totalDeposited || 0
+            );
+
+        document
+            .getElementById("balance")
+            .textContent =
+                balance.toLocaleString(
+                    "en-KE",
+                    {
+                        minimumFractionDigits:2,
+                        maximumFractionDigits:2
+                    }
+                );
+
+        document
+            .getElementById("totalDeposited")
+            .textContent =
+                deposited.toLocaleString(
+                    "en-KE",
+                    {
+                        minimumFractionDigits:2,
+                        maximumFractionDigits:2
+                    }
+                );
+
+    }catch(error){
+
+        console.error(
+            "Billing wallet error:",
+            error
+        );
+
+    }
+
+}
+
+
+/* =========================================
+   LOAD TRANSACTIONS
+========================================= */
+
+async function loadTransactions(){
+
+    const container =
+        document.getElementById(
+            "transactions"
+        );
+
+    try{
+
+        const response =
+            await fetch(
+                "/api/transactions",
+                {
+                    method:"GET",
+                    headers:
+                        authHeaders()
+                }
+            );
+
+        if(response.status === 401){
+
+            logout();
+
+            return;
+
+        }
+
+        const data =
+            await response.json();
+
+        if(!response.ok){
+
+            throw new Error(
+                data.message ||
+                "Unable to load payments"
+            );
+
+        }
+
+        const transactions =
+            data.transactions ||
+            [];
+
+        renderTransactions(
+            transactions
+        );
+
+    }catch(error){
+
+        console.error(
+            "Transaction error:",
+            error
+        );
+
+        container.innerHTML = `
+            <div class="empty">
+                Unable to load payment history.
+            </div>
+        `;
+
+    }
+
+}
+
+
+/* =========================================
+   RENDER TRANSACTIONS
+========================================= */
+
+function renderTransactions(
+    transactions
+){
+
+    const container =
+        document.getElementById(
+            "transactions"
+        );
+
+
+    if(!transactions.length){
+
+        container.innerHTML = `
+            <div class="empty">
+                No payments yet.
+            </div>
+        `;
+
+        return;
+
+    }
+
+
+    container.innerHTML =
+        transactions
+            .slice(0,10)
+            .map(
+                transaction => {
+
+                    const amount =
+                        Number(
+                            transaction.amount ||
+                            0
+                        );
+
+                    const type =
+                        transaction.type ||
+                        "deposit";
+
+                    const status =
+                        transaction.status ||
+                        "pending";
+
+                    let statusClass =
+                        "pending";
+
+                    if(
+                        status ===
+                        "completed"
+                    ){
+
+                        statusClass =
+                            "amount";
+
+                    }else if(
+                        status ===
+                        "failed"
+                    ){
+
+                        statusClass =
+                            "failed";
+
+                    }
+
+
+                    const date =
+                        transaction.createdAt
+                            ? new Date(
+                                transaction.createdAt
+                              ).toLocaleString(
+                                "en-KE"
+                              )
+                            : "Unknown date";
+
+
+                    const sign =
+                        type ===
+                        "deposit"
+                            ? "+"
+                            : "-";
+
+
+                    return `
+
+                        <div class="transaction">
+
+                            <div class="transaction-left">
+
+                                <div class="transaction-icon">
+
+                                    ${
+                                        type ===
+                                        "deposit"
+                                            ? "↓"
+                                            : "↑"
+                                    }
+
+                                </div>
+
+                                <div>
+
+                                    <div class="transaction-title">
+
+                                        ${
+                                            type ===
+                                            "deposit"
+                                                ? "M-Pesa Deposit"
+                                                : "Wallet Transaction"
+                                        }
+
+                                    </div>
+
+                                    <div class="transaction-date">
+
+                                        ${escapeHtml(
+                                            date
+                                        )}
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="transaction-right">
+
+                                <div
+                                    class="${statusClass}"
+                                >
+
+                                    ${sign}
+                                    KES
+                                    ${amount.toFixed(2)}
+
+                                </div>
+
+                                <div
+                                    class="transaction-date"
+                                >
+
+                                    ${escapeHtml(
+                                        status
+                                    )}
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    `;
+
+                }
+            )
+            .join("");
+
+}
+
+
+/* =========================================
+   SIDEBAR
+========================================= */
+
+function toggleSidebar(){
+
+    document
+        .getElementById("sidebar")
+        .classList.toggle(
+            "open"
+        );
+
+}
+
+
+/* =========================================
+   LOGOUT
+========================================= */
+
+function logout(){
+
+    localStorage.removeItem(
+        "scorpio_token"
+    );
+
+    localStorage.removeItem(
+        "scorpio_user"
+    );
+
+    window.location.href =
+        "login.html";
+
+}
+
+
+/* =========================================
+   ESCAPE HTML
+========================================= */
+
+function escapeHtml(value){
+
+    const element =
+        document.createElement(
+            "div"
+        );
+
+    element.textContent =
+        String(
+            value ?? ""
+        );
+
+    return element.innerHTML;
+
+}
+
+
+/* =========================================
+   INITIALIZE
+========================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    async function(){
+
+        if(!checkAuth()){
+
+            return;
+
+        }
+
+        loadUser();
+
+        await loadWallet();
+
+        await loadTransactions();
+
+    }
+);
+
+</script>
+
+</body>
+</html>
