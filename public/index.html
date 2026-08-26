@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#08000f">
+  <title>Scorpio Host — Deploy. Run. Scale.</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #050008;
+      color: #fff;
+    }
+
+    /* =========================
+       SPLASH SCREEN
+    ========================= */
+
+    #splash {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background: #050008;
+      transition:
+        opacity 0.8s ease,
+        visibility 0.8s ease;
+    }
+
+    #splash.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .scorpio-bg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      filter: brightness(0.55) saturate(1.25);
+      transform: scale(1.03);
+      animation: slowZoom 5s ease-in-out infinite alternate;
+    }
+
+    .overlay {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(
+          circle at center,
+          rgba(116, 0, 255, 0.18),
+          rgba(0, 0, 0, 0.72) 70%
+        );
+    }
+
+    .vignette {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(
+          ellipse at center,
+          transparent 25%,
+          rgba(0, 0, 0, 0.65) 100%
+        );
+    }
+
+    .splash-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 25px;
+      animation: appear 1s ease forwards;
+    }
+
+    .logo-symbol {
+      width: 88px;
+      height: 88px;
+      margin: 0 auto 20px;
+      border: 2px solid rgba(190, 95, 255, 0.8);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 48px;
+      color: #d78cff;
+      text-shadow:
+        0 0 10px #a000ff,
+        0 0 25px #7b00ff,
+        0 0 45px #5e00ff;
+      box-shadow:
+        0 0 15px rgba(148, 0, 255, 0.8),
+        inset 0 0 20px rgba(148, 0, 255, 0.25);
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    .brand {
+      font-size: clamp(34px, 9vw, 70px);
+      font-weight: 900;
+      letter-spacing: 5px;
+      color: #fff;
+      text-shadow:
+        0 0 8px #fff,
+        0 0 18px #b000ff,
+        0 0 35px #7a00ff,
+        0 0 60px #5500ff;
+    }
+
+    .tagline {
+      margin-top: 10px;
+      font-size: 14px;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      color: #dcaaff;
+    }
+
+    .loader {
+      width: 150px;
+      height: 3px;
+      margin: 32px auto 0;
+      overflow: hidden;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.15);
+      box-shadow: 0 0 12px rgba(140, 0, 255, 0.5);
+    }
+
+    .loader-bar {
+      width: 40%;
+      height: 100%;
+      border-radius: inherit;
+      background: #c66cff;
+      box-shadow:
+        0 0 10px #a000ff,
+        0 0 20px #7b00ff;
+      animation: loading 1.5s ease-in-out infinite;
+    }
+
+    .loading-text {
+      margin-top: 14px;
+      font-size: 11px;
+      color: rgba(255,255,255,0.65);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+
+    /* =========================
+       MAIN LANDING PAGE
+    ========================= */
+
+    #main {
+      width: 100%;
+      min-height: 100vh;
+      overflow-y: auto;
+      opacity: 0;
+      transform: scale(0.98);
+      transition:
+        opacity 0.8s ease,
+        transform 0.8s ease;
+    }
+
+    #main.visible {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 30px 20px;
+      background:
+        radial-gradient(circle at 50% 35%, rgba(116,0,255,.22), transparent 40%),
+        linear-gradient(135deg, #08000f, #13001f, #050008);
+    }
+
+    .hero-content {
+      max-width: 850px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 8px 15px;
+      margin-bottom: 22px;
+      border: 1px solid rgba(190, 100, 255, .45);
+      border-radius: 50px;
+      background: rgba(120, 0, 255, .1);
+      color: #dcaaff;
+      font-size: 12px;
+      letter-spacing: 2px;
+    }
+
+    .hero h1 {
+      font-size: clamp(40px, 10vw, 80px);
+      line-height: 1;
+      margin-bottom: 20px;
+      text-shadow:
+        0 0 15px #8b00ff,
+        0 0 35px rgba(120,0,255,.7);
+    }
+
+    .hero h1 span {
+      color: #c36cff;
+    }
+
+    .hero p {
+      max-width: 620px;
+      margin: auto;
+      color: #c5b6cf;
+      line-height: 1.7;
+      font-size: 17px;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      margin-top: 32px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 145px;
+      padding: 14px 25px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 700;
+      transition: .25s ease;
+    }
+
+    .btn-primary {
+      color: white;
+      background: linear-gradient(135deg, #8b00ff, #c000ff);
+      box-shadow: 0 0 25px rgba(145,0,255,.45);
+    }
+
+    .btn-secondary {
+      color: #e4caff;
+      border: 1px solid rgba(191, 102, 255, .45);
+      background: rgba(255,255,255,.04);
+      backdrop-filter: blur(12px);
+    }
+
+    .btn:hover {
+      transform: translateY(-3px);
+    }
+
+    @keyframes loading {
+      0% {
+        transform: translateX(-150%);
+      }
+      100% {
+        transform: translateX(400%);
+      }
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        transform: scale(1);
+        box-shadow:
+          0 0 15px rgba(148, 0, 255, 0.8),
+          inset 0 0 20px rgba(148, 0, 255, 0.25);
+      }
+
+      50% {
+        transform: scale(1.07);
+        box-shadow:
+          0 0 30px rgba(148, 0, 255, 1),
+          0 0 60px rgba(100, 0, 255, .5),
+          inset 0 0 25px rgba(148, 0, 255, 0.35);
+      }
+    }
+
+    @keyframes slowZoom {
+      from {
+        transform: scale(1.03);
+      }
+      to {
+        transform: scale(1.10);
+      }
+    }
+
+    @keyframes appear {
+      from {
+        opacity: 0;
+        transform: translateY(15px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .brand {
+        letter-spacing: 3px;
+      }
+
+      .tagline {
+        letter-spacing: 3px;
+      }
+
+      .logo-symbol {
+        width: 72px;
+        height: 72px;
+        font-size: 38px;
+      }
+
+      .hero p {
+        font-size: 15px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- =========================
+       SPLASH SCREEN
+  ========================= -->
+
+  <section id="splash">
+
+    <!-- Put your uploaded Scorpio image here -->
+    <img
+      src="scorpio-bg.jpg"
+      alt="Scorpio"
+      class="scorpio-bg"
+    >
+
+    <div class="overlay"></div>
+    <div class="vignette"></div>
+
+    <div class="splash-content">
+
+      <div class="logo-symbol">♏</div>
+
+      <div class="brand">
+        SCORPIO
+      </div>
+
+      <div class="tagline">
+        Bot Hosting
+      </div>
+
+      <div class="loader">
+        <div class="loader-bar"></div>
+      </div>
+
+      <div class="loading-text">
+        Initializing...
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- =========================
+       MAIN PAGE
+  ========================= -->
+
+  <main id="main">
+
+    <section class="hero">
+
+      <div class="hero-content">
+
+        <div class="badge">
+          🦂 SCORPIO HOST
+        </div>
+
+        <h1>
+          Deploy.
+          <span>Run.</span>
+          Scale.
+        </h1>
+
+        <p>
+          Powerful and reliable hosting for your WhatsApp,
+          Telegram and Discord bots. Deploy your bot,
+          monitor it and keep it online from one simple platform.
+        </p>
+
+        <div class="buttons">
+          <a href="register.html" class="btn btn-primary">
+            Get Started
+          </a>
+
+          <a href="login.html" class="btn btn-secondary">
+            Login
+          </a>
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <script>
+    const splash = document.getElementById("splash");
+    const main = document.getElementById("main");
+
+    // Wait for the splash animation to finish.
+    window.addEventListener("load", () => {
+
+      setTimeout(() => {
+
+        splash.classList.add("hidden");
+        main.classList.add("visible");
+
+      }, 1800);
+
+    });
+  </script>
+
+</body>
+</html>
