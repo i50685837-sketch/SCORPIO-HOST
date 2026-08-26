@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Login — Scorpio Host</title>
+
+<style>
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    font-family:Arial,Helvetica,sans-serif;
+    background:
+        radial-gradient(circle at top,#35105f 0%,#13051f 40%,#050008 100%);
+    color:white;
+}
+
+.container{
+    width:100%;
+    max-width:430px;
+}
+
+.logo{
+    text-align:center;
+    margin-bottom:25px;
+}
+
+.logo h1{
+    font-size:32px;
+    letter-spacing:1px;
+}
+
+.logo span{
+    color:#a855f7;
+}
+
+.card{
+    background:rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.12);
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
+    border-radius:24px;
+    padding:30px;
+    box-shadow:0 20px 60px rgba(0,0,0,.4);
+}
+
+.card h2{
+    font-size:25px;
+    margin-bottom:8px;
+}
+
+.subtitle{
+    color:#aaa;
+    font-size:14px;
+    margin-bottom:25px;
+}
+
+.input-group{
+    margin-bottom:18px;
+}
+
+label{
+    display:block;
+    font-size:13px;
+    color:#ccc;
+    margin-bottom:7px;
+}
+
+input{
+    width:100%;
+    padding:14px 15px;
+    border-radius:12px;
+    border:1px solid rgba(255,255,255,.12);
+    background:rgba(0,0,0,.25);
+    color:white;
+    outline:none;
+    font-size:15px;
+}
+
+input:focus{
+    border-color:#a855f7;
+    box-shadow:0 0 0 3px rgba(168,85,247,.12);
+}
+
+button{
+    width:100%;
+    border:none;
+    border-radius:13px;
+    padding:15px;
+    background:linear-gradient(135deg,#9333ea,#a855f7);
+    color:white;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+button:disabled{
+    opacity:.6;
+    cursor:not-allowed;
+}
+
+.message{
+    display:none;
+    margin-bottom:17px;
+    padding:12px;
+    border-radius:10px;
+    font-size:13px;
+}
+
+.message.error{
+    display:block;
+    background:rgba(239,68,68,.12);
+    border:1px solid rgba(239,68,68,.3);
+    color:#ff8d8d;
+}
+
+.message.success{
+    display:block;
+    background:rgba(34,197,94,.12);
+    border:1px solid rgba(34,197,94,.3);
+    color:#7cff9e;
+}
+
+.register{
+    text-align:center;
+    margin-top:22px;
+    color:#aaa;
+    font-size:14px;
+}
+
+.register a{
+    color:#c084fc;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="logo">
+        <h1>SCORPIO <span>HOST</span></h1>
+    </div>
+
+
+    <div class="card">
+
+        <h2>Welcome back</h2>
+
+        <p class="subtitle">
+            Login to your Scorpio Host account.
+        </p>
+
+
+        <div
+            id="message"
+            class="message"
+        ></div>
+
+
+        <form id="loginForm">
+
+            <div class="input-group">
+
+                <label for="email">
+                    Email address
+                </label>
+
+                <input
+                    id="email"
+                    type="email"
+                    placeholder="you@example.com"
+                    autocomplete="email"
+                    required
+                >
+
+            </div>
+
+
+            <div class="input-group">
+
+                <label for="password">
+                    Password
+                </label>
+
+                <input
+                    id="password"
+                    type="password"
+                    placeholder="Your password"
+                    autocomplete="current-password"
+                    required
+                >
+
+            </div>
+
+
+            <button
+                id="loginButton"
+                type="submit"
+            >
+                Login
+            </button>
+
+        </form>
+
+
+        <div class="register">
+            Don't have an account?
+            <a href="/register.html">
+                Create one
+            </a>
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+const API_BASE = "/api";
+
+const form =
+    document.getElementById("loginForm");
+
+const button =
+    document.getElementById("loginButton");
+
+const message =
+    document.getElementById("message");
+
+
+function showMessage(text, type) {
+
+    message.textContent = text;
+
+    message.className =
+        "message " + type;
+
+}
+
+
+form.addEventListener(
+    "submit",
+    async function(event) {
+
+        event.preventDefault();
+
+
+        const email =
+            document
+                .getElementById("email")
+                .value
+                .trim()
+                .toLowerCase();
+
+
+        const password =
+            document
+                .getElementById("password")
+                .value;
+
+
+        button.disabled = true;
+
+        button.textContent =
+            "Logging in...";
+
+        message.className =
+            "message";
+
+
+        try {
+
+            const response =
+                await fetch(
+                    `${API_BASE}/auth/login`,
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        body:
+                            JSON.stringify({
+                                email,
+                                password
+                            })
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
+
+            if (!response.ok || !data.success) {
+
+                throw new Error(
+                    data.message ||
+                    "Login failed."
+                );
+
+            }
+
+
+            /*
+             * Save JWT
+             */
+
+            localStorage.setItem(
+                "scorpio_token",
+                data.token
+            );
+
+
+            /*
+             * Save user
+             */
+
+            if (data.user) {
+
+                localStorage.setItem(
+                    "scorpio_user",
+                    JSON.stringify(data.user)
+                );
+
+            }
+
+
+            /*
+             * Save wallet information
+             */
+
+            if (data.wallet) {
+
+                localStorage.setItem(
+                    "scorpio_wallet",
+                    JSON.stringify(data.wallet)
+                );
+
+            }
+
+
+            showMessage(
+                "Login successful. Redirecting...",
+                "success"
+            );
+
+
+            setTimeout(
+                () => {
+
+                    window.location.href =
+                        "/dashboard.html";
+
+                },
+                500
+            );
+
+
+        } catch (error) {
+
+            console.error(
+                "Login error:",
+                error
+            );
+
+
+            showMessage(
+                error.message ||
+                "Unable to login.",
+                "error"
+            );
+
+
+            button.disabled = false;
+
+            button.textContent =
+                "Login";
+
+        }
+
+    }
+);
+
+</script>
+
+</body>
+</html>
