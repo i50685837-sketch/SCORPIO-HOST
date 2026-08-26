@@ -1,0 +1,1287 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="theme-color"
+        content="#08000f"
+    >
+
+    <title>Wallet — Scorpio Host</title>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+
+        body {
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            min-height: 100vh;
+
+            color: #ffffff;
+
+            background:
+                radial-gradient(
+                    circle at top left,
+                    #32105c 0,
+                    transparent 35%
+                ),
+                radial-gradient(
+                    circle at bottom right,
+                    #102d5c 0,
+                    transparent 35%
+                ),
+                #08000f;
+
+            padding: 20px;
+        }
+
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            margin: auto;
+        }
+
+
+        /* =============================================
+           HEADER
+        ============================================= */
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            margin-bottom: 25px;
+        }
+
+
+        .brand {
+            font-size: 24px;
+            font-weight: 800;
+        }
+
+
+        .brand span {
+            color: #a855f7;
+        }
+
+
+        .back {
+            color: #ffffff;
+            text-decoration: none;
+
+            padding: 10px 15px;
+
+            border: 1px solid
+                rgba(255,255,255,.15);
+
+            border-radius: 12px;
+
+            background:
+                rgba(255,255,255,.06);
+        }
+
+
+        /* =============================================
+           BALANCE
+        ============================================= */
+
+        .balance-card {
+
+            position: relative;
+
+            overflow: hidden;
+
+            padding: 30px;
+
+            border-radius: 25px;
+
+            margin-bottom: 20px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(124,58,237,.45),
+                    rgba(37,99,235,.30)
+                );
+
+            border:
+                1px solid
+                rgba(255,255,255,.15);
+
+            box-shadow:
+                0 20px 60px
+                rgba(0,0,0,.35);
+        }
+
+
+        .balance-card::after {
+
+            content: "";
+
+            position: absolute;
+
+            width: 180px;
+            height: 180px;
+
+            right: -70px;
+            top: -70px;
+
+            border-radius: 50%;
+
+            background:
+                rgba(255,255,255,.08);
+        }
+
+
+        .label {
+            color:
+                rgba(255,255,255,.7);
+
+            font-size: 14px;
+
+            margin-bottom: 8px;
+        }
+
+
+        .balance {
+
+            font-size: 42px;
+
+            font-weight: 800;
+
+            margin-bottom: 6px;
+        }
+
+
+        .currency {
+            color:
+                rgba(255,255,255,.7);
+        }
+
+
+        /* =============================================
+           STATS
+        ============================================= */
+
+        .stats {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 12px;
+
+            margin-bottom: 20px;
+        }
+
+
+        .stat {
+
+            padding: 18px;
+
+            border-radius: 18px;
+
+            background:
+                rgba(255,255,255,.06);
+
+            border:
+                1px solid
+                rgba(255,255,255,.10);
+        }
+
+
+        .stat-title {
+
+            font-size: 12px;
+
+            color:
+                rgba(255,255,255,.55);
+
+            margin-bottom: 8px;
+        }
+
+
+        .stat-value {
+
+            font-size: 18px;
+
+            font-weight: 700;
+        }
+
+
+        /* =============================================
+           CARD
+        ============================================= */
+
+        .card {
+
+            padding: 22px;
+
+            border-radius: 22px;
+
+            margin-bottom: 20px;
+
+            background:
+                rgba(255,255,255,.06);
+
+            border:
+                1px solid
+                rgba(255,255,255,.10);
+
+            backdrop-filter:
+                blur(20px);
+        }
+
+
+        .card h2 {
+
+            font-size: 20px;
+
+            margin-bottom: 18px;
+        }
+
+
+        /* =============================================
+           FORM
+        ============================================= */
+
+        .input-group {
+
+            margin-bottom: 15px;
+        }
+
+
+        .input-group label {
+
+            display: block;
+
+            font-size: 13px;
+
+            color:
+                rgba(255,255,255,.65);
+
+            margin-bottom: 7px;
+        }
+
+
+        input {
+
+            width: 100%;
+
+            padding: 14px 15px;
+
+            color: #ffffff;
+
+            background:
+                rgba(0,0,0,.25);
+
+            border:
+                1px solid
+                rgba(255,255,255,.15);
+
+            border-radius: 12px;
+
+            outline: none;
+
+            font-size: 15px;
+        }
+
+
+        input:focus {
+
+            border-color:
+                #a855f7;
+
+        }
+
+
+        button {
+
+            width: 100%;
+
+            padding: 15px;
+
+            border: 0;
+
+            border-radius: 13px;
+
+            color: #ffffff;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #7c3aed,
+                    #2563eb
+                );
+
+            font-size: 16px;
+
+            font-weight: 700;
+
+            cursor: pointer;
+        }
+
+
+        button:disabled {
+
+            opacity: .6;
+
+            cursor:
+                not-allowed;
+        }
+
+
+        .message {
+
+            margin-top: 13px;
+
+            padding: 12px;
+
+            border-radius: 10px;
+
+            display: none;
+
+            font-size: 14px;
+        }
+
+
+        .message.show {
+            display: block;
+        }
+
+
+        /* =============================================
+           TRANSACTIONS
+        ============================================= */
+
+        .transaction {
+
+            display: flex;
+
+            justify-content:
+                space-between;
+
+            align-items: center;
+
+            gap: 15px;
+
+            padding: 15px 0;
+
+            border-bottom:
+                1px solid
+                rgba(255,255,255,.08);
+        }
+
+
+        .transaction:last-child {
+            border-bottom: 0;
+        }
+
+
+        .transaction-ref {
+
+            font-size: 13px;
+
+            font-weight: 700;
+        }
+
+
+        .transaction-date {
+
+            margin-top: 5px;
+
+            font-size: 11px;
+
+            color:
+                rgba(255,255,255,.45);
+        }
+
+
+        .transaction-right {
+            text-align: right;
+        }
+
+
+        .amount {
+
+            font-weight: 700;
+
+            font-size: 14px;
+        }
+
+
+        .status {
+
+            display: inline-block;
+
+            margin-top: 5px;
+
+            padding: 4px 8px;
+
+            border-radius: 20px;
+
+            font-size: 10px;
+
+            background:
+                rgba(255,255,255,.08);
+        }
+
+
+        .empty {
+
+            text-align: center;
+
+            padding: 30px;
+
+            color:
+                rgba(255,255,255,.45);
+        }
+
+
+        .loading {
+
+            text-align: center;
+
+            padding: 25px;
+
+            color:
+                rgba(255,255,255,.5);
+        }
+
+
+        /* =============================================
+           MOBILE
+        ============================================= */
+
+        @media (
+            max-width: 650px
+        ) {
+
+            body {
+                padding: 14px;
+            }
+
+
+            .balance {
+                font-size: 34px;
+            }
+
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+
+            .transaction {
+                align-items:
+                    flex-start;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="container">
+
+
+    <!-- =========================================
+         HEADER
+    ========================================== -->
+
+    <div class="header">
+
+        <div class="brand">
+            Scorpio <span>Host</span>
+        </div>
+
+        <a
+            href="/dashboard.html"
+            class="back"
+        >
+            Dashboard
+        </a>
+
+    </div>
+
+
+    <!-- =========================================
+         BALANCE
+    ========================================== -->
+
+    <div class="balance-card">
+
+        <div class="label">
+            Available Balance
+        </div>
+
+        <div
+            class="balance"
+            id="balance"
+        >
+            KES 0.00
+        </div>
+
+        <div class="currency">
+            Scorpio Host Wallet
+        </div>
+
+    </div>
+
+
+    <!-- =========================================
+         STATS
+    ========================================== -->
+
+    <div class="stats">
+
+        <div class="stat">
+
+            <div class="stat-title">
+                TOTAL DEPOSITED
+            </div>
+
+            <div
+                class="stat-value"
+                id="totalDeposited"
+            >
+                KES 0.00
+            </div>
+
+        </div>
+
+
+        <div class="stat">
+
+            <div class="stat-title">
+                TOTAL SPENT
+            </div>
+
+            <div
+                class="stat-value"
+                id="totalSpent"
+            >
+                KES 0.00
+            </div>
+
+        </div>
+
+
+        <div class="stat">
+
+            <div class="stat-title">
+                TOTAL WITHDRAWN
+            </div>
+
+            <div
+                class="stat-value"
+                id="totalWithdrawn"
+            >
+                KES 0.00
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================================
+         DEPOSIT
+    ========================================== -->
+
+    <div class="card">
+
+        <h2>
+            💳 Deposit with M-Pesa
+        </h2>
+
+
+        <form id="depositForm">
+
+
+            <div class="input-group">
+
+                <label>
+                    Amount (KES)
+                </label>
+
+                <input
+                    id="amount"
+                    type="number"
+                    min="1"
+                    step="1"
+                    placeholder="Enter amount"
+                    required
+                >
+
+            </div>
+
+
+            <div class="input-group">
+
+                <label>
+                    M-Pesa Phone Number
+                </label>
+
+                <input
+                    id="phoneNumber"
+                    type="tel"
+                    placeholder="07XXXXXXXX"
+                    required
+                >
+
+            </div>
+
+
+            <button
+                id="depositButton"
+                type="submit"
+            >
+                Request M-Pesa STK
+            </button>
+
+
+            <div
+                class="message"
+                id="message"
+            ></div>
+
+
+        </form>
+
+    </div>
+
+
+    <!-- =========================================
+         TRANSACTIONS
+    ========================================== -->
+
+    <div class="card">
+
+        <h2>
+            Recent Transactions
+        </h2>
+
+
+        <div
+            id="transactions"
+            class="loading"
+        >
+            Loading transactions...
+        </div>
+
+    </div>
+
+
+</div>
+
+
+<script>
+
+/* =====================================================
+   CONFIG
+===================================================== */
+
+const API =
+    window.location.origin;
+
+
+/* =====================================================
+   TOKEN
+===================================================== */
+
+const token =
+    localStorage.getItem("token");
+
+
+/* =====================================================
+   AUTH CHECK
+===================================================== */
+
+if (!token) {
+
+    window.location.href =
+        "/login.html";
+
+}
+
+
+/* =====================================================
+   ELEMENTS
+===================================================== */
+
+const balance =
+    document.getElementById(
+        "balance"
+    );
+
+const totalDeposited =
+    document.getElementById(
+        "totalDeposited"
+    );
+
+const totalSpent =
+    document.getElementById(
+        "totalSpent"
+    );
+
+const totalWithdrawn =
+    document.getElementById(
+        "totalWithdrawn"
+    );
+
+const transactions =
+    document.getElementById(
+        "transactions"
+    );
+
+const depositForm =
+    document.getElementById(
+        "depositForm"
+    );
+
+const depositButton =
+    document.getElementById(
+        "depositButton"
+    );
+
+const message =
+    document.getElementById(
+        "message"
+    );
+
+
+/* =====================================================
+   FORMAT MONEY
+===================================================== */
+
+function money(value) {
+
+    return (
+        "KES " +
+        Number(value || 0)
+            .toLocaleString(
+                "en-KE",
+                {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                }
+            )
+    );
+
+}
+
+
+/* =====================================================
+   SHOW MESSAGE
+===================================================== */
+
+function showMessage(
+    text,
+    success = false
+) {
+
+    message.textContent =
+        text;
+
+    message.classList.add(
+        "show"
+    );
+
+    if (success) {
+
+        message.style.background =
+            "rgba(34,197,94,.15)";
+
+    } else {
+
+        message.style.background =
+            "rgba(239,68,68,.15)";
+
+    }
+
+}
+
+
+/* =====================================================
+   API HEADERS
+===================================================== */
+
+function headers() {
+
+    return {
+
+        "Content-Type":
+            "application/json",
+
+        "Authorization":
+            `Bearer ${token}`
+
+    };
+
+}
+
+
+/* =====================================================
+   LOAD WALLET
+===================================================== */
+
+async function loadWallet() {
+
+    try {
+
+        const response =
+            await fetch(
+                `${API}/api/wallet`,
+                {
+                    headers:
+                        headers()
+                }
+            );
+
+
+        if (
+            response.status === 401
+        ) {
+
+            localStorage.removeItem(
+                "token"
+            );
+
+            window.location.href =
+                "/login.html";
+
+            return;
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        if (!data.success) {
+
+            throw new Error(
+                data.message ||
+                "Unable to load wallet."
+            );
+
+        }
+
+
+        const wallet =
+            data.wallet;
+
+
+        balance.textContent =
+            money(
+                wallet.balance
+            );
+
+
+        totalDeposited.textContent =
+            money(
+                wallet.totalDeposited
+            );
+
+
+        totalSpent.textContent =
+            money(
+                wallet.totalSpent
+            );
+
+
+        totalWithdrawn.textContent =
+            money(
+                wallet.totalWithdrawn
+            );
+
+
+    } catch (error) {
+
+        console.error(
+            error
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   LOAD TRANSACTIONS
+===================================================== */
+
+async function loadTransactions() {
+
+    try {
+
+        const response =
+            await fetch(
+                `${API}/api/wallet/transactions`,
+                {
+                    headers:
+                        headers()
+                }
+            );
+
+
+        if (
+            response.status === 401
+        ) {
+
+            localStorage.removeItem(
+                "token"
+            );
+
+            window.location.href =
+                "/login.html";
+
+            return;
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        if (!data.success) {
+
+            throw new Error(
+                data.message ||
+                "Unable to load transactions."
+            );
+
+        }
+
+
+        if (
+            !data.transactions ||
+            data.transactions.length === 0
+        ) {
+
+            transactions.innerHTML =
+                `
+                <div class="empty">
+                    No transactions yet.
+                </div>
+                `;
+
+            return;
+
+        }
+
+
+        transactions.innerHTML =
+            data.transactions
+                .map(
+                    transaction => {
+
+                        const date =
+                            new Date(
+                                transaction.createdAt
+                            )
+                            .toLocaleString(
+                                "en-KE"
+                            );
+
+
+                        return `
+                        <div class="transaction">
+
+                            <div>
+
+                                <div class="transaction-ref">
+                                    ${escapeHtml(
+                                        transaction.reference
+                                    )}
+                                </div>
+
+                                <div class="transaction-date">
+                                    ${date}
+                                </div>
+
+                            </div>
+
+
+                            <div class="transaction-right">
+
+                                <div class="amount">
+                                    ${money(
+                                        transaction.amount
+                                    )}
+                                </div>
+
+                                <div class="status">
+                                    ${escapeHtml(
+                                        transaction.status
+                                    )}
+                                </div>
+
+                            </div>
+
+                        </div>
+                        `;
+
+                    }
+                )
+                .join("");
+
+
+    } catch (error) {
+
+        console.error(
+            error
+        );
+
+        transactions.innerHTML =
+            `
+            <div class="empty">
+                Unable to load transactions.
+            </div>
+            `;
+
+    }
+
+}
+
+
+/* =====================================================
+   HTML ESCAPE
+===================================================== */
+
+function escapeHtml(value) {
+
+    return String(value ?? "")
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+/* =====================================================
+   DEPOSIT
+===================================================== */
+
+depositForm.addEventListener(
+    "submit",
+    async function(event) {
+
+        event.preventDefault();
+
+
+        const amount =
+            Number(
+                document.getElementById(
+                    "amount"
+                ).value
+            );
+
+
+        const phoneNumber =
+            document.getElementById(
+                "phoneNumber"
+            ).value.trim();
+
+
+        if (
+            !amount ||
+            amount <= 0
+        ) {
+
+            showMessage(
+                "Enter a valid amount."
+            );
+
+            return;
+
+        }
+
+
+        if (!phoneNumber) {
+
+            showMessage(
+                "Enter your M-Pesa number."
+            );
+
+            return;
+
+        }
+
+
+        depositButton.disabled =
+            true;
+
+        depositButton.textContent =
+            "Sending STK...";
+
+
+        message.classList.remove(
+            "show"
+        );
+
+
+        try {
+
+            const response =
+                await fetch(
+                    `${API}/api/intasend/stk`,
+                    {
+
+                        method:
+                            "POST",
+
+                        headers:
+                            headers(),
+
+                        body:
+                            JSON.stringify({
+
+                                amount:
+                                    amount,
+
+                                phoneNumber:
+                                    phoneNumber
+
+                            })
+
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    data.message ||
+                    data.error ||
+                    "STK request failed."
+                );
+
+            }
+
+
+            showMessage(
+                "STK prompt sent. Check your M-Pesa phone and complete the payment.",
+                true
+            );
+
+
+            depositForm.reset();
+
+
+            /*
+             * The wallet should NOT be increased here.
+             *
+             * The IntaSend webhook will update the
+             * transaction and wallet after successful
+             * payment.
+             */
+
+            await loadTransactions();
+
+            await loadWallet();
+
+
+        } catch (error) {
+
+            console.error(
+                error
+            );
+
+            showMessage(
+                error.message ||
+                "Unable to send STK prompt."
+            );
+
+        } finally {
+
+            depositButton.disabled =
+                false;
+
+            depositButton.textContent =
+                "Request M-Pesa STK";
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+   INITIAL LOAD
+===================================================== */
+
+loadWallet();
+
+loadTransactions();
+
+
+/* =====================================================
+   REFRESH
+===================================================== */
+
+setInterval(
+    () => {
+
+        loadWallet();
+
+        loadTransactions();
+
+    },
+    10000
+);
+
+</script>
+
+</body>
+
+</html>
