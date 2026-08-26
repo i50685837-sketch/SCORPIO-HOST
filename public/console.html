@@ -1,0 +1,1964 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#08000f">
+
+<title>Console — Scorpio Host</title>
+
+<style>
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Arial,Helvetica,sans-serif;
+    background:
+        radial-gradient(
+            circle at 70% 10%,
+            rgba(125,0,255,.18),
+            transparent 30%
+        ),
+        linear-gradient(
+            135deg,
+            #050008,
+            #100018,
+            #050008
+        );
+    color:#fff;
+    min-height:100vh;
+}
+
+/* =====================================================
+   SIDEBAR
+===================================================== */
+
+.sidebar{
+    position:fixed;
+    left:0;
+    top:0;
+    bottom:0;
+    width:245px;
+    padding:24px 16px;
+    background:rgba(13,3,21,.94);
+    border-right:1px solid rgba(180,80,255,.16);
+    backdrop-filter:blur(20px);
+    z-index:100;
+    transition:.3s;
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-bottom:35px;
+}
+
+.brand-icon{
+    width:43px;
+    height:43px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border:1px solid #a900ff;
+    border-radius:50%;
+    color:#d38aff;
+    font-size:22px;
+    box-shadow:0 0 18px rgba(145,0,255,.55);
+}
+
+.brand h2{
+    font-size:17px;
+    letter-spacing:2px;
+}
+
+.brand small{
+    display:block;
+    margin-top:3px;
+    color:#8e7c97;
+    font-size:9px;
+}
+
+.nav-title{
+    color:#675b70;
+    font-size:9px;
+    letter-spacing:2px;
+    margin:20px 10px 8px;
+}
+
+.nav a{
+    display:flex;
+    align-items:center;
+    gap:13px;
+    height:45px;
+    padding:0 12px;
+    margin:4px 0;
+    border-radius:11px;
+    color:#a99bad;
+    text-decoration:none;
+    font-size:13px;
+    transition:.2s;
+}
+
+.nav a:hover,
+.nav a.active{
+    color:#fff;
+    background:
+        linear-gradient(
+            90deg,
+            rgba(130,0,255,.25),
+            rgba(130,0,255,.06)
+        );
+    box-shadow:inset 3px 0 #a500ff;
+}
+
+.nav-icon{
+    width:21px;
+    text-align:center;
+    font-size:17px;
+}
+
+/* =====================================================
+   MAIN
+===================================================== */
+
+.main{
+    margin-left:245px;
+    min-height:100vh;
+    padding:25px;
+}
+
+.topbar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:15px;
+    margin-bottom:22px;
+}
+
+.menu-btn{
+    display:none;
+    border:0;
+    background:rgba(255,255,255,.06);
+    color:white;
+    font-size:22px;
+    padding:9px 12px;
+    border-radius:10px;
+}
+
+.page-title h1{
+    font-size:26px;
+}
+
+.page-title p{
+    color:#8f8195;
+    font-size:12px;
+    margin-top:5px;
+}
+
+.profile{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.avatar{
+    width:40px;
+    height:40px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:
+        linear-gradient(
+            135deg,
+            #7100ff,
+            #b000ff
+        );
+    font-weight:bold;
+    box-shadow:
+        0 0 18px
+        rgba(140,0,255,.35);
+}
+
+/* =====================================================
+   BOT SELECTOR
+===================================================== */
+
+.toolbar{
+    display:flex;
+    gap:12px;
+    align-items:center;
+    margin-bottom:18px;
+}
+
+.select-box{
+    flex:1;
+}
+
+select{
+    width:100%;
+    height:48px;
+    padding:0 14px;
+    border-radius:11px;
+    border:1px solid rgba(190,90,255,.18);
+    outline:none;
+    background:#12091a;
+    color:white;
+    font-size:13px;
+}
+
+select:focus{
+    border-color:#a400ff;
+    box-shadow:
+        0 0 0 3px
+        rgba(145,0,255,.08);
+}
+
+.refresh-btn{
+    height:48px;
+    padding:0 18px;
+    border:1px solid rgba(190,90,255,.18);
+    border-radius:11px;
+    background:rgba(255,255,255,.05);
+    color:white;
+    cursor:pointer;
+}
+
+.refresh-btn:hover{
+    border-color:#a400ff;
+}
+
+/* =====================================================
+   CONSOLE CARD
+===================================================== */
+
+.console-card{
+    border:
+        1px solid
+        rgba(190,90,255,.16);
+
+    border-radius:18px;
+
+    background:
+        rgba(255,255,255,.035);
+
+    backdrop-filter:
+        blur(14px);
+
+    overflow:hidden;
+}
+
+/* HEADER */
+
+.console-header{
+    min-height:65px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:15px 18px;
+
+    border-bottom:
+        1px solid
+        rgba(255,255,255,.07);
+}
+
+.bot-heading{
+    display:flex;
+    align-items:center;
+    gap:11px;
+}
+
+.bot-icon{
+    width:38px;
+    height:38px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:10px;
+    background:rgba(135,0,255,.16);
+    font-size:18px;
+}
+
+.bot-name{
+    font-size:13px;
+    font-weight:bold;
+}
+
+.bot-status{
+    margin-top:4px;
+    color:#69eaa0;
+    font-size:10px;
+}
+
+.status-dot{
+    display:inline-block;
+    width:7px;
+    height:7px;
+    margin-right:5px;
+    border-radius:50%;
+    background:#4cff98;
+    box-shadow:0 0 8px #4cff98;
+}
+
+.console-actions{
+    display:flex;
+    gap:7px;
+}
+
+.control{
+    border:0;
+    border-radius:8px;
+    padding:9px 12px;
+    color:white;
+    font-size:11px;
+    cursor:pointer;
+}
+
+.start{
+    background:#087a45;
+}
+
+.restart{
+    background:#5d16a8;
+}
+
+.stop{
+    background:#8a1830;
+}
+
+.control:hover{
+    filter:brightness(1.2);
+}
+
+/* =====================================================
+   TERMINAL
+===================================================== */
+
+.terminal{
+    height:480px;
+    padding:18px;
+    overflow-y:auto;
+    background:#030305;
+
+    font-family:
+        "Courier New",
+        monospace;
+
+    font-size:12px;
+    line-height:1.75;
+}
+
+.terminal::-webkit-scrollbar{
+    width:7px;
+}
+
+.terminal::-webkit-scrollbar-track{
+    background:#050507;
+}
+
+.terminal::-webkit-scrollbar-thumb{
+    background:#35104e;
+    border-radius:10px;
+}
+
+.line{
+    white-space:pre-wrap;
+    word-break:break-word;
+}
+
+.time{
+    color:#635a67;
+}
+
+.info{
+    color:#b98cff;
+}
+
+.success{
+    color:#69eaa0;
+}
+
+.warning{
+    color:#f1c76d;
+}
+
+.error{
+    color:#ff6b81;
+}
+
+.command{
+    color:#8bc9ff;
+}
+
+/* =====================================================
+   INPUT
+===================================================== */
+
+.command-bar{
+    display:flex;
+    gap:8px;
+    padding:13px;
+    border-top:
+        1px solid
+        rgba(255,255,255,.07);
+
+    background:
+        rgba(10,4,15,.9);
+}
+
+.command-bar input{
+    flex:1;
+    height:43px;
+    padding:0 13px;
+    border-radius:9px;
+    border:
+        1px solid
+        rgba(190,90,255,.16);
+
+    outline:none;
+
+    background:
+        rgba(0,0,0,.35);
+
+    color:white;
+
+    font-family:
+        "Courier New",
+        monospace;
+
+    font-size:12px;
+}
+
+.command-bar input:focus{
+    border-color:#9f00ff;
+}
+
+.send-btn{
+    border:0;
+    padding:0 17px;
+    border-radius:9px;
+    background:
+        linear-gradient(
+            135deg,
+            #7200ff,
+            #b000ff
+        );
+    color:white;
+    cursor:pointer;
+}
+
+/* =====================================================
+   INFO GRID
+===================================================== */
+
+.info-grid{
+    display:grid;
+    grid-template-columns:
+        repeat(4,1fr);
+
+    gap:12px;
+
+    margin-top:18px;
+}
+
+.info-card{
+    padding:16px;
+
+    border:
+        1px solid
+        rgba(190,90,255,.13);
+
+    border-radius:14px;
+
+    background:
+        rgba(255,255,255,.035);
+}
+
+.info-label{
+    color:#756a7c;
+    font-size:10px;
+}
+
+.info-value{
+    margin-top:8px;
+    font-size:15px;
+    font-weight:bold;
+}
+
+/* =====================================================
+   EMPTY STATE
+===================================================== */
+
+.empty{
+    height:100%;
+    min-height:450px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    color:#766b7d;
+}
+
+.empty-icon{
+    font-size:50px;
+    margin-bottom:15px;
+}
+
+.empty h2{
+    color:#cbbbd1;
+    font-size:18px;
+}
+
+.empty p{
+    max-width:350px;
+    margin-top:8px;
+    font-size:12px;
+    line-height:1.6;
+}
+
+.deploy-link{
+    margin-top:18px;
+    display:inline-block;
+    padding:11px 18px;
+    border-radius:10px;
+    color:white;
+    text-decoration:none;
+    background:
+        linear-gradient(
+            135deg,
+            #7200ff,
+            #b000ff
+        );
+    font-size:12px;
+}
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media(max-width:1000px){
+
+    .info-grid{
+        grid-template-columns:
+            repeat(2,1fr);
+    }
+
+}
+
+@media(max-width:750px){
+
+    .sidebar{
+        transform:translateX(-100%);
+    }
+
+    .sidebar.open{
+        transform:translateX(0);
+    }
+
+    .main{
+        margin-left:0;
+        padding:18px;
+    }
+
+    .menu-btn{
+        display:block;
+    }
+
+    .topbar{
+        justify-content:flex-start;
+    }
+
+    .page-title{
+        flex:1;
+    }
+
+    .profile{
+        display:none;
+    }
+
+    .console-header{
+        align-items:flex-start;
+        gap:10px;
+    }
+
+    .console-actions{
+        flex-wrap:wrap;
+        justify-content:flex-end;
+    }
+
+}
+
+@media(max-width:520px){
+
+    .toolbar{
+        flex-direction:column;
+        align-items:stretch;
+    }
+
+    .refresh-btn{
+        width:100%;
+    }
+
+    .info-grid{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .console-header{
+        flex-direction:column;
+    }
+
+    .console-actions{
+        width:100%;
+    }
+
+    .control{
+        flex:1;
+    }
+
+    .terminal{
+        height:420px;
+        font-size:11px;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- =====================================================
+     SIDEBAR
+===================================================== -->
+
+<aside class="sidebar" id="sidebar">
+
+    <div class="brand">
+
+        <div class="brand-icon">
+            ♏
+        </div>
+
+        <div>
+
+            <h2>SCORPIO</h2>
+
+            <small>
+                HOSTING PLATFORM
+            </small>
+
+        </div>
+
+    </div>
+
+    <div class="nav-title">
+        MAIN
+    </div>
+
+    <nav class="nav">
+
+        <a href="dashboard.html">
+            <span class="nav-icon">⌂</span>
+            Dashboard
+        </a>
+
+        <a href="my-bots.html">
+            <span class="nav-icon">🤖</span>
+            My Bots
+        </a>
+
+        <a href="deploy.html">
+            <span class="nav-icon">🚀</span>
+            Deploy Bot
+        </a>
+
+        <a href="console.html" class="active">
+            <span class="nav-icon">⌘</span>
+            Console
+        </a>
+
+        <a href="monitoring.html">
+            <span class="nav-icon">📊</span>
+            Monitoring
+        </a>
+
+        <div class="nav-title">
+            ACCOUNT
+        </div>
+
+        <a href="wallet.html">
+            <span class="nav-icon">💳</span>
+            Wallet
+        </a>
+
+        <a href="billing.html">
+            <span class="nav-icon">💰</span>
+            Billing
+        </a>
+
+        <a href="api-keys.html">
+            <span class="nav-icon">🔑</span>
+            API Keys
+        </a>
+
+        <a href="settings.html">
+            <span class="nav-icon">⚙️</span>
+            Settings
+        </a>
+
+        <a href="login.html" onclick="logout()">
+            <span class="nav-icon">↪</span>
+            Logout
+        </a>
+
+    </nav>
+
+</aside>
+
+
+<!-- =====================================================
+     MAIN
+===================================================== -->
+
+<main class="main">
+
+    <div class="topbar">
+
+        <button
+            class="menu-btn"
+            onclick="toggleSidebar()"
+        >
+            ☰
+        </button>
+
+        <div class="page-title">
+
+            <h1>
+                Console
+            </h1>
+
+            <p>
+                View logs and manage your running bots.
+            </p>
+
+        </div>
+
+        <div class="profile">
+
+            <strong id="userName">
+                Morde
+            </strong>
+
+            <div
+                class="avatar"
+                id="avatar"
+            >
+                M
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- BOT SELECTOR -->
+
+    <div class="toolbar">
+
+        <div class="select-box">
+
+            <select id="botSelect">
+
+                <option value="">
+                    Select a bot
+                </option>
+
+            </select>
+
+        </div>
+
+        <button
+            class="refresh-btn"
+            onclick="loadBots()"
+        >
+            ↻ Refresh
+        </button>
+
+    </div>
+
+
+    <!-- CONSOLE -->
+
+    <div class="console-card">
+
+        <div
+            class="console-header"
+            id="consoleHeader"
+        >
+
+            <div class="bot-heading">
+
+                <div class="bot-icon">
+                    🤖
+                </div>
+
+                <div>
+
+                    <div
+                        class="bot-name"
+                        id="selectedBotName"
+                    >
+                        No bot selected
+                    </div>
+
+                    <div
+                        class="bot-status"
+                        id="selectedBotStatus"
+                    >
+                        <span class="status-dot"></span>
+                        Waiting for bot
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="console-actions">
+
+                <button
+                    class="control start"
+                    onclick="botAction('start')"
+                >
+                    ▶ Start
+                </button>
+
+                <button
+                    class="control restart"
+                    onclick="botAction('restart')"
+                >
+                    ↻ Restart
+                </button>
+
+                <button
+                    class="control stop"
+                    onclick="botAction('stop')"
+                >
+                    ■ Stop
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- TERMINAL -->
+
+        <div
+            class="terminal"
+            id="terminal"
+        >
+
+            <div class="empty">
+
+                <div class="empty-icon">
+                    ⌘
+                </div>
+
+                <h2>
+                    No Bot Selected
+                </h2>
+
+                <p>
+                    Select one of your deployed bots
+                    above to view its console logs.
+                </p>
+
+                <a
+                    href="deploy.html"
+                    class="deploy-link"
+                >
+                    Deploy a Bot
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- COMMAND -->
+
+        <div class="command-bar">
+
+            <input
+                id="commandInput"
+                type="text"
+                placeholder="Enter command..."
+                autocomplete="off"
+            >
+
+            <button
+                class="send-btn"
+                onclick="sendCommand()"
+            >
+                Send
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- BOT INFORMATION -->
+
+    <div class="info-grid">
+
+        <div class="info-card">
+
+            <div class="info-label">
+                STATUS
+            </div>
+
+            <div
+                class="info-value"
+                id="infoStatus"
+            >
+                —
+            </div>
+
+        </div>
+
+        <div class="info-card">
+
+            <div class="info-label">
+                UPTIME
+            </div>
+
+            <div
+                class="info-value"
+                id="infoUptime"
+            >
+                —
+            </div>
+
+        </div>
+
+        <div class="info-card">
+
+            <div class="info-label">
+                CPU
+            </div>
+
+            <div
+                class="info-value"
+                id="infoCpu"
+            >
+                —
+            </div>
+
+        </div>
+
+        <div class="info-card">
+
+            <div class="info-label">
+                MEMORY
+            </div>
+
+            <div
+                class="info-value"
+                id="infoMemory"
+            >
+                —
+            </div>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<script>
+
+/* =====================================================
+   API CONFIG
+===================================================== */
+
+const API = "/api";
+
+
+/* =====================================================
+   AUTH TOKEN
+===================================================== */
+
+function getToken(){
+
+    return localStorage.getItem(
+        "scorpio_token"
+    );
+
+}
+
+
+/* =====================================================
+   AUTH HEADERS
+===================================================== */
+
+function authHeaders(){
+
+    const token =
+        getToken();
+
+    return {
+
+        "Content-Type":
+            "application/json",
+
+        ...(token
+            ? {
+                "Authorization":
+                    `Bearer ${token}`
+            }
+            : {})
+
+    };
+
+}
+
+
+/* =====================================================
+   SIDEBAR
+===================================================== */
+
+function toggleSidebar(){
+
+    document
+        .getElementById("sidebar")
+        .classList.toggle("open");
+
+}
+
+
+/* =====================================================
+   LOGOUT
+===================================================== */
+
+function logout(){
+
+    localStorage.removeItem(
+        "scorpio_token"
+    );
+
+    localStorage.removeItem(
+        "scorpio_user"
+    );
+
+}
+
+
+/* =====================================================
+   LOAD USER
+===================================================== */
+
+function loadUser(){
+
+    try{
+
+        const user =
+            JSON.parse(
+                localStorage.getItem(
+                    "scorpio_user"
+                )
+            );
+
+        if(!user)
+            return;
+
+        const name =
+            user.name ||
+            user.username ||
+            user.email ||
+            "User";
+
+        document
+            .getElementById("userName")
+            .textContent = name;
+
+        document
+            .getElementById("avatar")
+            .textContent =
+                name
+                    .charAt(0)
+                    .toUpperCase();
+
+    }catch(error){
+
+        console.log(
+            "User information unavailable."
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   BOT DATA
+===================================================== */
+
+let bots = [];
+
+let selectedBot = null;
+
+
+/* =====================================================
+   LOAD BOTS
+===================================================== */
+
+async function loadBots(){
+
+    const select =
+        document.getElementById(
+            "botSelect"
+        );
+
+    try{
+
+        const response =
+            await fetch(
+                `${API}/bots`,
+                {
+                    method:"GET",
+                    headers:
+                        authHeaders()
+                }
+            );
+
+        if(
+            response.status === 401
+        ){
+
+            window.location.href =
+                "login.html";
+
+            return;
+
+        }
+
+        const data =
+            await response.json();
+
+        if(!response.ok){
+
+            throw new Error(
+                data.message ||
+                "Unable to load bots"
+            );
+
+        }
+
+        /*
+          Support common response formats:
+
+          {
+             bots:[]
+          }
+
+          or
+
+          {
+             data:[]
+          }
+        */
+
+        bots =
+            data.bots ||
+            data.data ||
+            [];
+
+        select.innerHTML =
+            `<option value="">
+                Select a bot
+             </option>`;
+
+        if(!bots.length){
+
+            showEmpty();
+
+            return;
+
+        }
+
+        bots.forEach(
+            (bot,index) => {
+
+                const option =
+                    document.createElement(
+                        "option"
+                    );
+
+                option.value =
+                    bot._id ||
+                    bot.id ||
+                    index;
+
+                option.textContent =
+                    bot.name ||
+                    bot.botName ||
+                    `Bot ${index + 1}`;
+
+                select.appendChild(
+                    option
+                );
+
+            }
+        );
+
+        select.onchange =
+            selectBot;
+
+    }catch(error){
+
+        console.error(
+            "Load bots error:",
+            error
+        );
+
+        showLog(
+            "Failed to load bots: " +
+            error.message,
+            "error"
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   SELECT BOT
+===================================================== */
+
+function selectBot(){
+
+    const value =
+        document
+            .getElementById(
+                "botSelect"
+            )
+            .value;
+
+    if(value === ""){
+
+        selectedBot = null;
+
+        showEmpty();
+
+        return;
+
+    }
+
+    selectedBot =
+        bots.find(
+            (bot,index) =>
+                String(
+                    bot._id ||
+                    bot.id ||
+                    index
+                ) === String(value)
+        );
+
+    if(!selectedBot)
+        return;
+
+    updateBotUI();
+
+    loadLogs();
+
+    loadBotStats();
+
+}
+
+
+/* =====================================================
+   UPDATE BOT UI
+===================================================== */
+
+function updateBotUI(){
+
+    if(!selectedBot)
+        return;
+
+    const name =
+        selectedBot.name ||
+        selectedBot.botName ||
+        "Unnamed Bot";
+
+    const status =
+        (
+            selectedBot.status ||
+            "stopped"
+        ).toLowerCase();
+
+    document
+        .getElementById(
+            "selectedBotName"
+        )
+        .textContent = name;
+
+    document
+        .getElementById(
+            "selectedBotStatus"
+        )
+        .innerHTML =
+
+        `<span
+            class="status-dot"
+            style="
+                background:
+                    ${
+                        status === "running"
+                            ? "#4cff98"
+                            : "#777"
+                    };
+            "
+        ></span>
+
+        ${status}`;
+
+    document
+        .getElementById(
+            "infoStatus"
+        )
+        .textContent =
+            status;
+
+}
+
+
+/* =====================================================
+   SHOW EMPTY
+===================================================== */
+
+function showEmpty(){
+
+    document
+        .getElementById(
+            "terminal"
+        )
+        .innerHTML = `
+
+        <div class="empty">
+
+            <div class="empty-icon">
+                ⌘
+            </div>
+
+            <h2>
+                No Bot Selected
+            </h2>
+
+            <p>
+                Select one of your deployed bots
+                above to view its console logs.
+            </p>
+
+            <a
+                href="deploy.html"
+                class="deploy-link"
+            >
+                Deploy a Bot
+            </a>
+
+        </div>
+    `;
+
+    document
+        .getElementById(
+            "selectedBotName"
+        )
+        .textContent =
+            "No bot selected";
+
+    document
+        .getElementById(
+            "infoStatus"
+        )
+        .textContent = "—";
+
+    document
+        .getElementById(
+            "infoUptime"
+        )
+        .textContent = "—";
+
+    document
+        .getElementById(
+            "infoCpu"
+        )
+        .textContent = "—";
+
+    document
+        .getElementById(
+            "infoMemory"
+        )
+        .textContent = "—";
+
+}
+
+
+/* =====================================================
+   LOAD LOGS
+===================================================== */
+
+async function loadLogs(){
+
+    if(!selectedBot)
+        return;
+
+    const botId =
+        selectedBot._id ||
+        selectedBot.id;
+
+    const terminal =
+        document.getElementById(
+            "terminal"
+        );
+
+    try{
+
+        const response =
+            await fetch(
+                `${API}/bots/${botId}/logs`,
+                {
+                    method:"GET",
+                    headers:
+                        authHeaders()
+                }
+            );
+
+        const data =
+            await response.json();
+
+        if(!response.ok){
+
+            throw new Error(
+                data.message ||
+                "Unable to load logs"
+            );
+
+        }
+
+        const logs =
+            data.logs ||
+            data.data ||
+            [];
+
+        terminal.innerHTML = "";
+
+        if(!logs.length){
+
+            showLog(
+                "No logs available for this bot.",
+                "info"
+            );
+
+            return;
+
+        }
+
+        logs.forEach(
+            log => {
+
+                let text;
+
+                if(
+                    typeof log ===
+                    "string"
+                ){
+
+                    text = log;
+
+                }else{
+
+                    text =
+                        log.message ||
+                        log.text ||
+                        JSON.stringify(log);
+
+                }
+
+                showLog(
+                    text,
+                    detectLogType(text)
+                );
+
+            }
+        );
+
+        scrollTerminal();
+
+    }catch(error){
+
+        console.error(
+            "Logs error:",
+            error
+        );
+
+        /*
+          If the logs endpoint does not
+          exist yet, don't destroy the UI.
+        */
+
+        terminal.innerHTML = "";
+
+        showLog(
+            "Console connected.",
+            "success"
+        );
+
+        showLog(
+            "Waiting for bot logs...",
+            "info"
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   DETECT LOG TYPE
+===================================================== */
+
+function detectLogType(text){
+
+    const value =
+        text.toLowerCase();
+
+    if(
+        value.includes("error") ||
+        value.includes("failed")
+    )
+        return "error";
+
+    if(
+        value.includes("warning") ||
+        value.includes("warn")
+    )
+        return "warning";
+
+    if(
+        value.includes("success") ||
+        value.includes("connected") ||
+        value.includes("running")
+    )
+        return "success";
+
+    if(
+        value.startsWith("$")
+    )
+        return "command";
+
+    return "info";
+
+}
+
+
+/* =====================================================
+   PRINT LOG
+===================================================== */
+
+function showLog(
+    message,
+    type="info"
+){
+
+    const terminal =
+        document.getElementById(
+            "terminal"
+        );
+
+    const line =
+        document.createElement(
+            "div"
+        );
+
+    line.className =
+        `line ${type}`;
+
+    const now =
+        new Date()
+            .toLocaleTimeString();
+
+    const time =
+        document.createElement(
+            "span"
+        );
+
+    time.className =
+        "time";
+
+    time.textContent =
+        `[${now}] `;
+
+    line.appendChild(time);
+
+    line.appendChild(
+        document.createTextNode(
+            message
+        )
+    );
+
+    terminal.appendChild(
+        line
+    );
+
+    scrollTerminal();
+
+}
+
+
+/* =====================================================
+   SCROLL TERMINAL
+===================================================== */
+
+function scrollTerminal(){
+
+    const terminal =
+        document.getElementById(
+            "terminal"
+        );
+
+    terminal.scrollTop =
+        terminal.scrollHeight;
+
+}
+
+
+/* =====================================================
+   BOT ACTION
+===================================================== */
+
+async function botAction(
+    action
+){
+
+    if(!selectedBot){
+
+        alert(
+            "Please select a bot first."
+        );
+
+        return;
+
+    }
+
+    const botId =
+        selectedBot._id ||
+        selectedBot.id;
+
+    try{
+
+        showLog(
+            `$ ${action}`,
+            "command"
+        );
+
+        const response =
+            await fetch(
+                `${API}/bots/${botId}/${action}`,
+                {
+                    method:"POST",
+                    headers:
+                        authHeaders()
+                }
+            );
+
+        const data =
+            await response.json();
+
+        if(!response.ok){
+
+            throw new Error(
+                data.message ||
+                `Failed to ${action} bot`
+            );
+
+        }
+
+        showLog(
+            data.message ||
+            `Bot ${action} command sent.`,
+            "success"
+        );
+
+        setTimeout(
+            () => {
+
+                loadBots();
+
+                loadBotStats();
+
+            },
+            1000
+        );
+
+    }catch(error){
+
+        console.error(
+            "Bot action error:",
+            error
+        );
+
+        showLog(
+            error.message,
+            "error"
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   SEND COMMAND
+===================================================== */
+
+async function sendCommand(){
+
+    if(!selectedBot){
+
+        alert(
+            "Select a bot first."
+        );
+
+        return;
+
+    }
+
+    const input =
+        document.getElementById(
+            "commandInput"
+        );
+
+    const command =
+        input.value.trim();
+
+    if(!command)
+        return;
+
+    const botId =
+        selectedBot._id ||
+        selectedBot.id;
+
+    showLog(
+        `$ ${command}`,
+        "command"
+    );
+
+    input.value = "";
+
+    try{
+
+        const response =
+            await fetch(
+                `${API}/bots/${botId}/command`,
+                {
+                    method:"POST",
+
+                    headers:
+                        authHeaders(),
+
+                    body:
+                        JSON.stringify({
+                            command
+                        })
+                }
+            );
+
+        const data =
+            await response.json();
+
+        if(!response.ok){
+
+            throw new Error(
+                data.message ||
+                "Command failed"
+            );
+
+        }
+
+        if(data.message){
+
+            showLog(
+                data.message,
+                "success"
+            );
+
+        }
+
+        if(data.output){
+
+            showLog(
+                data.output,
+                "info"
+            );
+
+        }
+
+    }catch(error){
+
+        showLog(
+            error.message,
+            "error"
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   ENTER KEY
+===================================================== */
+
+document
+    .getElementById(
+        "commandInput"
+    )
+    .addEventListener(
+        "keydown",
+        function(event){
+
+            if(
+                event.key ===
+                "Enter"
+            ){
+
+                sendCommand();
+
+            }
+
+        }
+    );
+
+
+/* =====================================================
+   BOT STATS
+===================================================== */
+
+async function loadBotStats(){
+
+    if(!selectedBot)
+        return;
+
+    const botId =
+        selectedBot._id ||
+        selectedBot.id;
+
+    try{
+
+        const response =
+            await fetch(
+                `${API}/bots/${botId}/stats`,
+                {
+                    method:"GET",
+                    headers:
+                        authHeaders()
+                }
+            );
+
+        if(!response.ok)
+            return;
+
+        const data =
+            await response.json();
+
+        const stats =
+            data.stats ||
+            data.data ||
+            data;
+
+        document
+            .getElementById(
+                "infoStatus"
+            )
+            .textContent =
+                stats.status ||
+                selectedBot.status ||
+                "—";
+
+        document
+            .getElementById(
+                "infoUptime"
+            )
+            .textContent =
+                stats.uptime ||
+                "—";
+
+        document
+            .getElementById(
+                "infoCpu"
+            )
+            .textContent =
+                stats.cpu != null
+                    ? `${stats.cpu}%`
+                    : "—";
+
+        document
+            .getElementById(
+                "infoMemory"
+            )
+            .textContent =
+                stats.memory ||
+                "—";
+
+    }catch(error){
+
+        console.log(
+            "Stats unavailable."
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   AUTO REFRESH
+===================================================== */
+
+setInterval(
+    () => {
+
+        if(selectedBot){
+
+            loadLogs();
+            loadBotStats();
+
+        }
+
+    },
+    10000
+);
+
+
+/* =====================================================
+   INITIALIZE
+===================================================== */
+
+loadUser();
+
+loadBots();
+
+</script>
+
+</body>
+</html>
