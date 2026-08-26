@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#08000f">
+
+<title>Dashboard — Scorpio Host</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    min-height:100vh;
+    font-family:Arial,Helvetica,sans-serif;
+    color:#fff;
+    background:
+        radial-gradient(circle at top left,#32105c,transparent 35%),
+        radial-gradient(circle at bottom right,#102d5c,transparent 35%),
+        #08000f;
+}
+
+header{
+    height:70px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 20px;
+    border-bottom:1px solid rgba(255,255,255,.08);
+    background:rgba(8,0,15,.7);
+    backdrop-filter:blur(15px);
+    position:sticky;
+    top:0;
+    z-index:10;
+}
+
+.logo{
+    font-size:23px;
+    font-weight:800;
+}
+
+.logo span{
+    color:#a855f7;
+}
+
+.menu{
+    width:42px;
+    height:42px;
+    border-radius:12px;
+    border:1px solid rgba(255,255,255,.12);
+    background:rgba(255,255,255,.06);
+    color:#fff;
+    font-size:22px;
+    cursor:pointer;
+}
+
+.layout{
+    display:flex;
+}
+
+.sidebar{
+    width:240px;
+    min-height:calc(100vh - 70px);
+    padding:20px;
+    border-right:1px solid rgba(255,255,255,.08);
+    background:rgba(0,0,0,.18);
+    position:fixed;
+    left:0;
+    top:70px;
+}
+
+.sidebar a{
+    display:block;
+    padding:13px 14px;
+    margin-bottom:7px;
+    color:rgba(255,255,255,.7);
+    text-decoration:none;
+    border-radius:12px;
+}
+
+.sidebar a:hover,
+.sidebar a.active{
+    background:rgba(168,85,247,.16);
+    color:#fff;
+}
+
+.main{
+    width:100%;
+    margin-left:240px;
+    padding:25px;
+}
+
+.welcome{
+    margin-bottom:25px;
+}
+
+.welcome h1{
+    font-size:28px;
+    margin-bottom:7px;
+}
+
+.welcome p{
+    color:rgba(255,255,255,.55);
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:15px;
+}
+
+.card{
+    padding:22px;
+    border-radius:20px;
+    background:rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.1);
+    backdrop-filter:blur(18px);
+}
+
+.card-title{
+    color:rgba(255,255,255,.55);
+    font-size:13px;
+    margin-bottom:10px;
+}
+
+.value{
+    font-size:25px;
+    font-weight:800;
+}
+
+.balance-card{
+    grid-column:span 2;
+    background:
+        linear-gradient(
+            135deg,
+            rgba(124,58,237,.42),
+            rgba(37,99,235,.28)
+        );
+}
+
+.actions{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:12px;
+    margin-top:20px;
+}
+
+.action{
+    display:block;
+    text-align:center;
+    padding:15px;
+    border-radius:13px;
+    text-decoration:none;
+    color:#fff;
+    background:rgba(255,255,255,.07);
+    border:1px solid rgba(255,255,255,.1);
+}
+
+.action.primary{
+    background:linear-gradient(135deg,#7c3aed,#2563eb);
+}
+
+.section{
+    margin-top:20px;
+}
+
+.section h2{
+    margin-bottom:15px;
+    font-size:20px;
+}
+
+.status{
+    margin-top:8px;
+    display:inline-block;
+    padding:5px 9px;
+    border-radius:20px;
+    background:rgba(34,197,94,.12);
+    color:#86efac;
+    font-size:11px;
+}
+
+.logout{
+    color:#fca5a5 !important;
+}
+
+@media(max-width:800px){
+
+    .sidebar{
+        transform:translateX(-100%);
+        transition:.25s;
+        z-index:20;
+    }
+
+    .sidebar.open{
+        transform:translateX(0);
+    }
+
+    .main{
+        margin-left:0;
+        padding:18px;
+    }
+
+    .grid{
+        grid-template-columns:1fr;
+    }
+
+    .balance-card{
+        grid-column:span 1;
+    }
+}
+
+@media(min-width:801px){
+
+    .menu{
+        display:none;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+
+    <div class="logo">
+        Scorpio <span>Host</span>
+    </div>
+
+    <button
+        class="menu"
+        id="menu"
+    >
+        ☰
+    </button>
+
+</header>
+
+
+<div class="layout">
+
+    <aside
+        class="sidebar"
+        id="sidebar"
+    >
+
+        <a
+            href="/dashboard.html"
+            class="active"
+        >
+            🏠 Dashboard
+        </a>
+
+        <a href="/wallet.html">
+            💳 Wallet
+        </a>
+
+        <a href="/projects.html">
+            📁 Projects
+        </a>
+
+        <a href="/bots.html">
+            🤖 Bots
+        </a>
+
+        <a href="/deployments.html">
+            🚀 Deployments
+        </a>
+
+        <a href="/domains.html">
+            🌐 Domains
+        </a>
+
+        <a href="/profile.html">
+            👤 Profile
+        </a>
+
+        <a
+            href="#"
+            id="logout"
+            class="logout"
+        >
+            🚪 Logout
+        </a>
+
+    </aside>
+
+
+    <main class="main">
+
+        <div class="welcome">
+
+            <h1 id="welcome">
+                Welcome 👋
+            </h1>
+
+            <p>
+                Manage your Scorpio Host account.
+            </p>
+
+        </div>
+
+
+        <div class="grid">
+
+            <div class="card balance-card">
+
+                <div class="card-title">
+                    AVAILABLE BALANCE
+                </div>
+
+                <div
+                    class="value"
+                    id="balance"
+                >
+                    KES 0.00
+                </div>
+
+                <div class="actions">
+
+                    <a
+                        class="action primary"
+                        href="/wallet.html"
+                    >
+                        + Deposit
+                    </a>
+
+                    <a
+                        class="action"
+                        href="/wallet.html"
+                    >
+                        Wallet
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="card-title">
+                    TOTAL DEPOSITED
+                </div>
+
+                <div
+                    class="value"
+                    id="deposited"
+                >
+                    KES 0.00
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="card-title">
+                    ACTIVE PROJECTS
+                </div>
+
+                <div
+                    class="value"
+                    id="projects"
+                >
+                    0
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="card-title">
+                    ACTIVE BOTS
+                </div>
+
+                <div
+                    class="value"
+                    id="bots"
+                >
+                    0
+                </div>
+
+                <div class="status">
+                    System Online
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="section">
+
+            <h2>
+                Quick Actions
+            </h2>
+
+            <div class="grid">
+
+                <a
+                    class="card action"
+                    href="/projects.html"
+                >
+                    📁 Create Project
+                </a>
+
+                <a
+                    class="card action"
+                    href="/bots.html"
+                >
+                    🤖 Create Bot
+                </a>
+
+                <a
+                    class="card action"
+                    href="/deployments.html"
+                >
+                    🚀 Deploy
+                </a>
+
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+
+<script>
+
+const API =
+    window.location.origin;
+
+const token =
+    localStorage.getItem("token");
+
+
+/* =============================================
+   AUTH
+============================================= */
+
+if(!token){
+
+    window.location.href =
+        "/login.html";
+
+}
+
+
+/* =============================================
+   ELEMENTS
+============================================= */
+
+const balance =
+    document.getElementById(
+        "balance"
+    );
+
+const deposited =
+    document.getElementById(
+        "deposited"
+    );
+
+const welcome =
+    document.getElementById(
+        "welcome"
+    );
+
+const projects =
+    document.getElementById(
+        "projects"
+    );
+
+const bots =
+    document.getElementById(
+        "bots"
+    );
+
+
+/* =============================================
+   MONEY
+============================================= */
+
+function money(value){
+
+    return "KES " +
+        Number(value || 0)
+        .toLocaleString(
+            "en-KE",
+            {
+                minimumFractionDigits:2,
+                maximumFractionDigits:2
+            }
+        );
+
+}
+
+
+/* =============================================
+   HEADERS
+============================================= */
+
+function headers(){
+
+    return {
+        "Content-Type":
+            "application/json",
+
+        "Authorization":
+            `Bearer ${token}`
+    };
+
+}
+
+
+/* =============================================
+   LOAD WALLET
+============================================= */
+
+async function loadWallet(){
+
+    try{
+
+        const response =
+            await fetch(
+                `${API}/api/wallet`,
+                {
+                    headers:
+                        headers()
+                }
+            );
+
+
+        if(
+            response.status === 401
+        ){
+
+            logoutUser();
+
+            return;
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        if(!data.success){
+
+            throw new Error(
+                data.message ||
+                "Wallet request failed."
+            );
+
+        }
+
+
+        const wallet =
+            data.wallet;
+
+
+        balance.textContent =
+            money(wallet.balance);
+
+
+        deposited.textContent =
+            money(wallet.totalDeposited);
+
+
+    }catch(error){
+
+        console.error(
+            "Wallet error:",
+            error
+        );
+
+    }
+
+}
+
+
+/* =============================================
+   LOAD USER
+============================================= */
+
+async function loadUser(){
+
+    try{
+
+        const saved =
+            localStorage.getItem(
+                "user"
+            );
+
+
+        if(saved){
+
+            const user =
+                JSON.parse(saved);
+
+            if(user.name){
+
+                welcome.textContent =
+                    `Welcome, ${user.name} 👋`;
+
+            }
+
+        }
+
+
+        /*
+         * If your backend provides a profile
+         * endpoint, this can later be replaced
+         * with a fresh server request.
+         */
+
+    }catch(error){
+
+        console.error(error);
+
+    }
+
+}
+
+
+/* =============================================
+   LOGOUT
+============================================= */
+
+function logoutUser(){
+
+    localStorage.removeItem(
+        "token"
+    );
+
+    localStorage.removeItem(
+        "user"
+    );
+
+    localStorage.removeItem(
+        "wallet"
+    );
+
+    window.location.href =
+        "/login.html";
+
+}
+
+
+document
+    .getElementById("logout")
+    .addEventListener(
+        "click",
+        event => {
+
+            event.preventDefault();
+
+            logoutUser();
+
+        }
+    );
+
+
+/* =============================================
+   MOBILE MENU
+============================================= */
+
+document
+    .getElementById("menu")
+    .addEventListener(
+        "click",
+        () => {
+
+            document
+                .getElementById("sidebar")
+                .classList.toggle("open");
+
+        }
+    );
+
+
+/* =============================================
+   START
+============================================= */
+
+loadUser();
+
+loadWallet();
+
+
+/*
+ * Refresh wallet every 10 seconds.
+ * This allows the dashboard to reflect
+ * a completed M-Pesa deposit.
+ */
+
+setInterval(
+    loadWallet,
+    10000
+);
+
+</script>
+
+</body>
+</html>
